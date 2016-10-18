@@ -40,6 +40,7 @@ group :development, :test do
   gem 'travis-lint'
 end
 
+gem 'rubocop', '~> 0.44.1', require: false
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
