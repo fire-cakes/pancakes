@@ -33,16 +33,19 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'database_cleaner'
-  gem 'spring'
   gem 'spring-commands-rspec'
   gem 'simplecov', require: false
   gem 'travis'
   gem 'travis-lint'
 end
 
+
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'sprockets', '2.11.0'
 gem 'sass-rails'
+
+
+gem 'rubocop', require: false
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -1,10 +1,19 @@
 language: ruby
 rvm:
 - 2.3.1
-
 sudo: required
-
 script:
 - export RAILS_ENV=test
+- bundle exec rubocop
 - bundle exec rake db:create db:schema:load db:test:prepare
 - bundle exec rspec --color --format documentation --require spec_helper --require rails_helper
+deploy:
+  provider: heroku
+  api_key:
+    secure: ip64MzC5tlmw3Y/4BHWwblpsnKwz7ehU58HrD23OV8MhXYHQBi0H03zxfglcGitEeR/GBuyvmqZWdqxPK42Siy2wDZtf/IfUciQPU/VOs13z1NhziP0hwMbL6nC0pfwGnA+lO4q49DgKGDOsYD4fLegteaCrHc3/pR0xlxm/zzTC229FZ3K/x59GDEN3ZkxcWyxdYs5XGi9bTcfyYKyCfFd85HusehEWZotEowUlGlOUo5/jvJ8WcTm1BydKObiB4WpETQRyve/RDKtCy4+dyz+HA5JZbfledrIuKR7hMVQx5Mkaos+vG0LDlZO5M3qaV5byI6L4cYsyOFC5DPExNx5lJ8hAGz7KyIGS04dtlG4Zn1u1FM+9qrjo4HQvS025u2z6fT37qqY7QlnN7/Wk3BVv6WSoNgmvIxcBfseC9t94YaQFDcyEMGPGUa8Lk/OXbogWkQjhe8NcqrHeLb14mA5YEf3WmBbe4FHhY0pwaRKknRd93dd61LEcur/moQR5edXZo1aU3oMBa6BYhDXoRKduBGRnLOQcRvMxIkvLwu4vgmeeHJtX98QZuZVEAvmzBVI6NuIsYa0oIvmfyIGcwHrMsqIHQuMZXgitFhgqqpTt8ZU4gfsSkXQavBwQFdxBnpR3Cmf30Ef11K7wq9nkdV0jXxPvFAMLLBAaFhNYTRs=
+  app: full-stack-pancakes
+  on:
+    repo: fire-cakes/pancakes
+notifications:
+  slack:
+    secure: Kh7SvMa2sevlWT0PF7FoLtCmU7SMZsGQDg18MsHyIoCUgae1iXb2kv2ppWM5S/lfMWzG3GSUSp+IgpYvp2lVD2XKn97zzzXznIQA9WMeOm1xhiX0eRllRO81ttnaTeyJ8YCGvw02RvuTbEsq+skHsKAfRO59H+ncxcZn4m5oRxsbv1B+Szry5uADINEXB7CK6c7uDz4fY5YBO1P0pEyB5QYZVy8ImJSPSCnmfXftwd4JHUWNliOK0Nkt0dDN60DB1Z3KJyM9RAPwaP7Qfr0+cnzsp0iHE+8NSRxvmAH49ORDjciXp8NBT54YEgyDTTdGnQSgssQdGXEAMwC7rPR/82/w1IdqZFxBXy6tUoZakbWMnYt7DG8dKBNZTd9HG+h0kXDymv8FPOmG8UkN7YGMjRxGPXdX7YdNczucd2w5P4mXwT0gsclh/0suuJJhep4BwJqiokwvBAhRhDlYe9vzQ1Nxe5y63bAG+xj/THLJw/PFSiWsih3Q8Mvqa1ojDDcS0tLkxrbvYSy69Hsfnvy5smTz79UKF9sRsuLNdy66AdrTo2xZL6hDdQpLTbmlMOWVwtCMGk9qc1gf7ivj7bUtVlt8u+VPaG+dwJu89eJcLZnWiuG/WY+HVNzfqQHUewe+H47dg+aCRtr8ZRhCwzyRwXS6JOWDd3yL/IoUwm257tM=
