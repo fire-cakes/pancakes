@@ -11,7 +11,7 @@ deploy:
   provider: heroku
   api_key:
     secure: ip64MzC5tlmw3Y/4BHWwblpsnKwz7ehU58HrD23OV8MhXYHQBi0H03zxfglcGitEeR/GBuyvmqZWdqxPK42Siy2wDZtf/IfUciQPU/VOs13z1NhziP0hwMbL6nC0pfwGnA+lO4q49DgKGDOsYD4fLegteaCrHc3/pR0xlxm/zzTC229FZ3K/x59GDEN3ZkxcWyxdYs5XGi9bTcfyYKyCfFd85HusehEWZotEowUlGlOUo5/jvJ8WcTm1BydKObiB4WpETQRyve/RDKtCy4+dyz+HA5JZbfledrIuKR7hMVQx5Mkaos+vG0LDlZO5M3qaV5byI6L4cYsyOFC5DPExNx5lJ8hAGz7KyIGS04dtlG4Zn1u1FM+9qrjo4HQvS025u2z6fT37qqY7QlnN7/Wk3BVv6WSoNgmvIxcBfseC9t94YaQFDcyEMGPGUa8Lk/OXbogWkQjhe8NcqrHeLb14mA5YEf3WmBbe4FHhY0pwaRKknRd93dd61LEcur/moQR5edXZo1aU3oMBa6BYhDXoRKduBGRnLOQcRvMxIkvLwu4vgmeeHJtX98QZuZVEAvmzBVI6NuIsYa0oIvmfyIGcwHrMsqIHQuMZXgitFhgqqpTt8ZU4gfsSkXQavBwQFdxBnpR3Cmf30Ef11K7wq9nkdV0jXxPvFAMLLBAaFhNYTRs=
-  app: "|full-stack-pancakes|"
+  app: full-stack-pancakes
   on:
     repo: fire-cakes/pancakes
 notifications:
