@@ -100,12 +100,21 @@ GEM
     net-http-persistent (3.0.0)
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
-<<<<<<< HEAD
+    warden (1.2.6)
+      rack (>= 1.0)
+    unicode-display_width (1.1.1)
+    warden (1.2.6)
+      rack (>= 1.0)
+    unicode-display_width (1.1.1)
+    warden (1.2.6)
+      rack (>= 1.0)
+    unicode-display_width (1.1.1)
+    warden (1.2.6)
+      rack (>= 1.0)
+    unicode-display_width (1.1.1)
     orm_adapter (0.5.0)
-=======
     parser (2.3.1.4)
       ast (~> 2.2)
->>>>>>> master
     pg (0.19.0)
     powerpack (0.1.1)
     pusher-client (0.6.2)
@@ -209,12 +218,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
-<<<<<<< HEAD
     warden (1.2.6)
       rack (>= 1.0)
-=======
     unicode-display_width (1.1.1)
->>>>>>> master
     websocket (1.2.3)
 
 PLATFORMS
