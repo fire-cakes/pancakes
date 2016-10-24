@@ -1,7 +1,6 @@
 class CreatePieces < ActiveRecord::Migration
   def change
     create_table :pieces do |t|
-      t.integer :id
       t.string :type
       t.boolean :color
       t.integer :x_coord
