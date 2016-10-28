@@ -1,34 +1,34 @@
 class GamesController < ApplicationController
+	before_action :authenticate_player!
 	def index
-		@available_games = Game.all
 	end
 
 	def show
 	end
 
 	def new
-  		@available_games = Game.new
+  		@available_game = Game.new
 	end
 
 	def create
-		@available_games = Game.new(params[:game])
+		@available_game = Game.new(params[:game])
 	end
 
 	def edit
 	end
 
 	def update
-		@available_games = Game.find(params[:id])
+		@available_game = Game.find(params[:id])
 
-		if @available_games.update_attributes(params[:game])
+		if @available_game.update_attributes(params[:game])
 			redirect_to root_path, :notice => "New game ready"
 		else
 			render "fail to load new game"
 	end
 
 	def destroy
-		@available_games = Game.find(params[:id])
-		@available_games.destroy
+		@available_game = Game.find(params[:id])
+		@available_game.destroy
 		redirect_to games_path, :notice => "Your game has been cancel"
 	end
 end

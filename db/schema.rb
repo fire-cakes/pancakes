@@ -17,21 +17,23 @@ ActiveRecord::Schema.define(version: 20161023204308) do
   enable_extension "plpgsql"
 
   create_table "games", force: true do |t|
-    t.integer  "white_id"
-    t.integer  "black_id"
-    t.integer  "winner_id"
+    t.string   "name"
+    t.integer  "player_id"
+    t.integer  "white_player_id"
+    t.integer  "black_player_id"
+    t.integer  "winner_player_id"
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "pieces", force: true do |t|
+    t.integer  "player_id"
     t.string   "type"
     t.boolean  "color"
     t.integer  "x_coord"
     t.integer  "y_coord"
     t.boolean  "captured"
-    t.integer  "player_id"
     t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
