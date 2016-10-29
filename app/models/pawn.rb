@@ -1,1 +1,1 @@
-class Pawn < Piece;end
+class Pawn < Piece; end
