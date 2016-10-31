@@ -27,8 +27,8 @@ class GamesController < ApplicationController
       redirect_to games_path, notice: 'New game ready'
     else
       render 'fail to load new game'
+    end
   end
-
     def destroy
       @available_game = Game.find(params[:id])
       @available_game.destroy
@@ -36,7 +36,7 @@ class GamesController < ApplicationController
     end
 
     private
-    def game_params
-      params.require(:game).permit(:user_id, :user2_id)
-end
+  def game_params
+    params.require(:game).permit(:user_id, :user2_id)
+  end
 end
