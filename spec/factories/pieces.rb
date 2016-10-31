@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :piece do
     id 1
-    type ""
+    type ''
     color false
     x_coord 1
     y_coord 1
