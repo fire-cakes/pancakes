@@ -1,0 +1,36 @@
+<h1>Team Full-Stack Pancakes</h1>
+
+<h1>Chess Game</h1>
+
+<div>
+<li>
+   <%= link_to "Sign in", user_session_session_path %>
+ </li>
+ </div>
+
+
+  
+<div class="flex-container">
+
+	<% if @avaliable_games %>
+		<% @avaliable_games.each do |game| %>
+
+			<div class="game-item-wrapper">
+			    <!-- games stuff goes here accessing game -->
+			    <%= image_tag("starting-game-board.png") %>
+			    <h4><%= game.name %></h4>
+			    <h5><%= game.players.count %></h5> 
+			    <p>Other things</p>
+			    <!-- Todo: add real path to link  join_game_path(game) -->
+			    <%= link_to 'New', '#', class: 'btn btn-primary' %>
+                <br />
+			    <%= link_to 'Join', '#', class: 'btn btn-primary' %>
+			    <br />
+			    <%= link_to 'Cancel', '#', class: 'btn btn-primary', :confirm => "Are you sure?", :method => :delete %>
+			</div>
+
+		<% end %>
+		    <% else %>
+	            <h2>Waiting for a new player</h2>
+	<% end %>
+</div>
