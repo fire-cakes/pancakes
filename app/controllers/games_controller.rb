@@ -30,7 +30,6 @@ class GamesController < ApplicationController
       render 'fail to load new game'
     end
   end
-<<<<<<< HEAD
 
   def destroy
     @available_game = Game.find(params[:id])
@@ -40,7 +39,6 @@ class GamesController < ApplicationController
 
   private
 
-=======
     def destroy
       @available_game = Game.find(params[:id])
       @available_game.destroy
@@ -48,7 +46,6 @@ class GamesController < ApplicationController
     end
 
     private
->>>>>>> master
   def game_params
     params.require(:game).permit(:user_id, :user2_id)
   end
