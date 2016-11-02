@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :games
   resources :users
+  resources :pieces, only:  :update
 end
 
 # The priority is based upon order of creation: first created -> highest priority.

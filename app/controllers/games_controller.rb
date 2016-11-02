@@ -1,6 +1,8 @@
 class GamesController < ApplicationController
-  # before_action :authenticate_player!
+ #before_action :authenticate_user!
+ helper_method :game
   def index
+
   end
 
   def show
@@ -12,13 +14,16 @@ class GamesController < ApplicationController
   end
 
   def create
-    @available_game = game_params[:user_id]
+    @available_game = game_params[:user2_id]
     @available_game = Game.create(user2_id: new_user_id, user_id: current_user.id)
     @available_game.initialize_game_board!
-    redirct_to games_path(@available_game)
+    redirect_to game_path(@available_game)
   end
 
-  def edit
+  def select    
+  end
+
+  def move
   end
 
   def update
@@ -31,14 +36,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def destroy
-    @available_game = Game.find(params[:id])
-    @available_game.destroy
-    redirect_to games_path, notice: 'Your game has been cancel'
-  end
-
-  private
-
     def destroy
       @available_game = Game.find(params[:id])
       @available_game.destroy
@@ -47,6 +44,6 @@ class GamesController < ApplicationController
 
     private
   def game_params
-    params.require(:game).permit(:user_id, :user2_id)
+    params.require(:game).permit(:user_id, :white_player_id, :black_player_id)
   end
 end
