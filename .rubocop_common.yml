@@ -2,6 +2,7 @@ AllCops:
   TargetRubyVersion: 2.3
   UseCache: true
   Exclude:
+    - db/migrate/*.rb
     - db/schema.rb
 
 Rails:
