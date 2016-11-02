@@ -13,8 +13,8 @@ class Piece < ActiveRecord::Base
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
     # starting coordinates
-    x0 = self.x_coord
-    y0 = self.y_coord
+    x0 = x_coord
+    y0 = y_coord
     # checks if destination is vertical, horizontal, or diagonal
     x_diff = x0 - x1
     y_diff = y0 - y1
@@ -65,34 +65,31 @@ class Piece < ActiveRecord::Base
     obstruction
   end
 
-
-# check if the position is filled
+  # check if the position is filled
   def pos_filled?(x, y)
     pieces.active.where(x_coord: x, y_coord: y).any?
   end
 
-# return the piece at that location
+  # return the piece at that location
   def return_piece(x, y)
     pieces.active.find(x_coord: x, y_coord: y)
   end
 
-# capture the piece
+  # capture the piece
   def capture_piece(x, y)
-    self.game.ret_piece(x, y).update(captured: true)
+    game.ret_piece(x, y).update(captured: true)
   end
 
-
-# this method will move a piece to new location and capture if appropriate
-# note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
+  # this method will move a piece to new location and capture if appropriate
+  # note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
   def move_to?(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).user_id != current_user
-         capture_piece(new_x, new_y)
-         update_attributes(x_coord: new_x, y_coord: new_y)
+        capture_piece(new_x, new_y)
+        update_attributes(x_coord: new_x, y_coord: new_y)
       end
     else
       update_attributes(x_coord: new_x, y_coord: new_y)
     end
   end
-
 end
