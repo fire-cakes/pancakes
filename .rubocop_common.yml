@@ -1,12 +1,17 @@
 AllCops:
-  TargetRubyVersion: 2.3
-  UseCache: true
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
   Exclude:
-    - db/migrate/*.rb
-    - db/schema.rb
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - !ruby/regexp /old_and_unused\.rb$/
 
 Rails:
-  Enabled: true
+  Enabled: false
+Rails/ActionFilter:
+  Enabled: false
 
 Metrics/ClassLength:
   Enabled: false
@@ -27,8 +32,8 @@ Style/IfUnlessModifier:
 Style/WhileUntilModifier:
   Enabled: false
 
-# Metrics/MethodLength:
-#  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
 
-# Metrics/ModuleLength:
-#  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false

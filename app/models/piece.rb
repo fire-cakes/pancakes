@@ -10,6 +10,7 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
+  # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
