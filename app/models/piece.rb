@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
   belongs_to :game
