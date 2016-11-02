@@ -3,6 +3,7 @@ class Piece < ActiveRecord::Base
   belongs_to :game
   belongs_to :player
   belongs_to :board
+  belongs_to :user
 
   def self.types
     %w(Pawn Rook Knight Bishop Queen King)
@@ -63,4 +64,34 @@ class Piece < ActiveRecord::Base
     end
     obstruction
   end
+
+
+# check if the position is filled
+  def pos_filled?(x, y)
+    pieces.active.where(x_coord: x, y_coord: y).any?
+  end
+
+# return the piece at that location
+  def return_piece(x, y)
+    pieces.active.find(x_coord: x, y_coord: y)
+  end
+
+# capture the piece
+  def capture_piece(x, y)
+    self.game.ret_piece(x, y).update(captured: true)
+  end
+
+
+# this method will move a piece to new location and capture if appropriate
+# note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
+  def move_to(new_x, new_y)
+    if pos_filled?(new_x, new_y) == true
+      if return_piece(new_x, new_y).user_id != current_user
+         capture_piece(new_x, new_y)
+         update_attributes(x_coord: new_x, y_coord: new_y)
+      end
+    else
+      update_attributes(x_coord: new_x, y_coord: new_y)
+    end
+
 end

@@ -4,6 +4,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    #@available_game = Game.find(params[:id])
     @available_game = Game.new
   end
 
@@ -47,6 +48,6 @@ class GamesController < ApplicationController
 
     private
   def game_params
-    params.require(:game).permit(:user_id, :user2_id)
+    params.require(:game).permit(:user_id, :user2_id, :name, :white_player_id, :black_player_id)
   end
 end
