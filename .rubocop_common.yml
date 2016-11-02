@@ -1,0 +1,32 @@
+AllCops:
+  UseCache: true
+  Exclude:
+    - db/schema.rb
+
+Rails:
+  Enabled: true
+
+Metrics/ClassLength:
+  Enabled: false
+
+# Since we are unlikely to ever
+# generate docs for this project.
+Style/Documentation:
+  Enabled: false
+
+# If/unless modifier clauses, or
+# conditionals (&&/||) are often
+# less readable than one-line
+# if/unless bodies.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# See Style/IfUnlessModifier
+Style/WhileUntilModifier:
+  Enabled: false
+
+# Metrics/MethodLength:
+#  Enabled: false
+
+# Metrics/ModuleLength:
+#  Enabled: false
