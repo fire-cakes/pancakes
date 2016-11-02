@@ -1,10 +1,44 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-.flex-container {
-	display: flex;
-	flex-flow: row-wrap;
-	justify-content: center;
-	align-items-: center;
+
+
+.navbar.navbar-inverse {
+  border-radius: 0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-bottom: 0;
 }
+
+.navbar-inverse .navbar-brand {
+    color: #feff00;
+    font-family: 'intro_rust_gbase_2_line';
+    font-size: 25px;
+}
+
+body {
+  background: url('/assets/chess2.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+}
+
+body:before {
+    content:"";
+    display:block;
+    position:fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    z-index:-1;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row-wrap;
+  justify-content: center;
+  align-items-: center;
+}
+
 
