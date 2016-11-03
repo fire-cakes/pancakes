@@ -1,17 +1,15 @@
 AllCops:
-  Include:
-    - '**/Rakefile'
-    - '**/config.ru'
+  TargetRubyVersion: 2.2
+  UseCache: true
   Exclude:
-    - 'db/**/*'
-    - 'config/**/*'
-    - 'script/**/*'
-    - !ruby/regexp /old_and_unused\.rb$/
+    - db/schema.rb
+    - bin/**/*
+    - config/initializers/**
+    - db/migrate/*
+    - vendor/**/*
 
 Rails:
-  Enabled: false
-Rails/ActionFilter:
-  Enabled: false
+  Enabled: true
 
 Metrics/ClassLength:
   Enabled: false
