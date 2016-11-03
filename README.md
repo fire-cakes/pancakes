@@ -1,6 +1,6 @@
-# Maple chess
+# Firecake chess
 
-Maple chess is a budding online chess application by the pancakes.
+Firecake chess is a budding online chess application made for pancake lovers everywhere.
 
 [![Build Status](https://travis-ci.org/fire-cakes/pancakes.svg?branch=master)](https://travis-ci.org/fire-cakes/pancakes)
 
