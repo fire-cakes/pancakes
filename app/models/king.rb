@@ -1,4 +1,9 @@
 class King < Piece
+	# frozen_string_literal: true
+  def image
+    color ? '&#9812;' : '&#9818;'
+  end
+  
   def obstructed?(new_x, new_y)
     if correct_moves.include? [new_x, new_y]
       true
@@ -42,5 +47,4 @@ class King < Piece
     valid_moves.push(right) if move_right
 
     valid_moves
-  end
 end

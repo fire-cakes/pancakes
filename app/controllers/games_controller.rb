@@ -1,21 +1,22 @@
 class GamesController < ApplicationController
   # before_action :authenticate_player!
   def index
+    # @games = Game.available
   end
 
   def show
-    # @available_game = Game.find(params[:id])
-    @available_game = Game.new
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces
   end
 
   def new
-    @available_game = Game.new
+    @game = Game.new
   end
 
   def create
-    @available_game = game_params[:user_id]
-    @available_game = Game.create(user2_id: new_user_id, user_id: current_user.id)
-    @available_game.initialize_game_board!
+    @game = game_params[:user_id]
+    @game = Game.create(user2_id: new_user_id, user_id: current_user.id)
+    @game.initialize_game_board!
     redirct_to games_path(@available_game)
   end
 
@@ -23,9 +24,9 @@ class GamesController < ApplicationController
   end
 
   def update
-    @available_game = Game.find(params[:id])
+    @game = Game.find(params[:id])
 
-    if @available_game.update_attributes(params[:game])
+    if @game.update_attributes(params[:game])
       redirect_to games_path, notice: 'New game ready'
     else
       render 'fail to load new game'
@@ -33,8 +34,8 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    @available_game = Game.find(params[:id])
-    @available_game.destroy
+    @game = Game.find(params[:id])
+    @game.destroy
     redirect_to games_path, notice: 'Your game has been cancel'
   end
 
