@@ -8,7 +8,9 @@ class King < Piece
   end
 
   def valid_move?(new_x, new_y)
-    return false unless super
+    if !super
+    	return false 
+    end
     y_distance = (new_y - @y_coord).abs
     x_distance = (new_x - @x_coord).abs
     return false if y_distance > 1 || x_distance > 1
