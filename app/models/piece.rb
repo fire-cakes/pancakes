@@ -1,5 +1,7 @@
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
+  BOARD_SIZE = 7
+
   belongs_to :game
   belongs_to :player
   belongs_to :board
@@ -13,8 +15,8 @@ class Piece < ActiveRecord::Base
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
     # starting coordinates
-    x0 = self.x_coord
-    y0 = self.y_coord
+    x0 = x_coord
+    y0 = y_coord
     # checks if destination is vertical, horizontal, or diagonal
     x_diff = x0 - x1
     y_diff = y0 - y1
@@ -65,34 +67,46 @@ class Piece < ActiveRecord::Base
     obstruction
   end
 
+  def valid_move?(new_x, new_y)
+    # piece cannot move to same position
+    return false if new_x == @x_coord && new_y == @y_coord
 
-# check if the position is filled
+    # piece cannot move on top of it's own color
+    return false if new_x == new_x || new_y == new_y
+
+    # piece cannot move off game board
+    return false if new_x >= BOARD_SIZE && new_y >= BOARD_SIZE
+
+    # no piece can be obstructed
+    return false if obstructed?(new_x, new_y)
+    true
+  end
+
+  # check if the position is filled
   def pos_filled?(x, y)
     pieces.active.where(x_coord: x, y_coord: y).any?
   end
 
-# return the piece at that location
+  # return the piece at that location
   def return_piece(x, y)
     pieces.active.find(x_coord: x, y_coord: y)
   end
 
-# capture the piece
+  # capture the piece
   def capture_piece(x, y)
-    self.game.ret_piece(x, y).update(captured: true)
+    game.reset_piece(x, y).update(captured: true)
   end
 
-
-# this method will move a piece to new location and capture if appropriate
-# note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
-  def move_to?(new_x, new_y)
+  # this method will move a piece to new location and capture if appropriate
+  # note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
+  def move_to!(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).user_id != current_user
-         capture_piece(new_x, new_y)
-         update_attributes(x_coord: new_x, y_coord: new_y)
+        capture_piece(new_x, new_y)
+        update_attributes(x_coord: new_x, y_coord: new_y)
       end
     else
       update_attributes(x_coord: new_x, y_coord: new_y)
     end
   end
-
 end

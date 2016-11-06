@@ -4,7 +4,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    #@available_game = Game.find(params[:id])
+    # @available_game = Game.find(params[:id])
     @available_game = Game.new
   end
 
@@ -40,13 +40,14 @@ class GamesController < ApplicationController
 
   private
 
-    def destroy
-      @available_game = Game.find(params[:id])
-      @available_game.destroy
-      redirect_to games_path, notice: 'Your game has been cancel'
-    end
+  def destroy
+    @available_game = Game.find(params[:id])
+    @available_game.destroy
+    redirect_to games_path, notice: 'Your game has been cancel'
+  end
 
-    private
+  private
+
   def game_params
     params.require(:game).permit(:user_id, :user2_id, :name, :white_player_id, :black_player_id)
   end
