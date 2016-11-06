@@ -39,6 +39,7 @@ group :development, :test do
   gem 'simplecov', require: false
   gem 'travis'
   gem 'travis-lint'
+  gem 'pry-rails'
 end
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
