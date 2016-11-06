@@ -70,22 +70,16 @@ class Piece < ActiveRecord::Base
     @new_x = new_x
     @new_y = new_y
     # piece cannot move to same position
-    if new_x == @x_coord && new_y == @y_coord
-      return false
-    end
+    return false if new_x == @x_coord && new_y == @y_coord
+
     # piece cannot move on top of it's own color
-    if new_x == @new_x || new_y == @new_y
-      return false
-    end
+    return false if new_x == @new_x || new_y == @new_y
 
     # piece cannot move off game board
-    if new_x >= @board_size && new_y >= @board_size
-      return false
-    end
+    return false if new_x >= @board_size && new_y >= @board_size
+
     # no piece can be obstructed
-    if obstructed?(new_x, new_y)
-      return false
-    end
+    return false if obstructed?(new_x, new_y)
     true
   end
 
