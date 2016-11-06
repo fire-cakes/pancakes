@@ -15,7 +15,7 @@ class King < Piece
     true
   end
 
-  def move_to?
+  def move_to
     piece = Piece.find(id)
     x0 = piece.x_coord
     y0 = piece.y_coord
@@ -30,8 +30,8 @@ class King < Piece
 
     # valid move only if
     move_up = y0 != 7
-    move_down = y0 != 0
-    move_left = x0 != 0
+    move_down = y0.nonzero?
+    move_left = x0.nonzero?
     move_right = x0 != 7
 
     valid_moves.push(up) if move_up

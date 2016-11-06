@@ -1,7 +1,5 @@
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
-  BOARD_SIZE = 7
-
   belongs_to :game
   belongs_to :player
   belongs_to :board
@@ -68,17 +66,26 @@ class Piece < ActiveRecord::Base
   end
 
   def valid_move?(new_x, new_y)
+    @board_size = 7
+    @new_x = new_x
+    @new_y = new_y
     # piece cannot move to same position
-    return false if new_x == @x_coord && new_y == @y_coord
-
+    if new_x == @x_coord && new_y == @y_coord
+      return false
+    end
     # piece cannot move on top of it's own color
-    return false if new_x == new_x || new_y == new_y
+    if new_x == @new_x || new_y == @new_y
+      return false
+    end
 
     # piece cannot move off game board
-    return false if new_x >= BOARD_SIZE && new_y >= BOARD_SIZE
-
+    if new_x >= @board_size && new_y >= @board_size
+      return false
+    end
     # no piece can be obstructed
-    return false if obstructed?(new_x, new_y)
+    if obstructed?(new_x, new_y)
+      return false
+    end
     true
   end
 
@@ -97,8 +104,6 @@ class Piece < ActiveRecord::Base
     game.reset_piece(x, y).update(captured: true)
   end
 
-  # this method will move a piece to new location and capture if appropriate
-  # note that the piece controller is being built by someone else right now, and updating the piece location will require an update method in that controller so it won't function correctly yet
   def move_to!(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).user_id != current_user

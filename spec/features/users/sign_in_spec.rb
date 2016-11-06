@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 feature 'Sign in', :omniauth do
   scenario 'user can sign in with valid account' do
     signin

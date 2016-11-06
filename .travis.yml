@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-- 2.3.1
+- 2.2.5
 sudo: required
 script:
 - export RAILS_ENV=test
@@ -14,6 +14,7 @@ deploy:
   app: full-stack-pancakes
   on:
     repo: fire-cakes/pancakes
+  run: "rake db:migrate"
 notifications:
   slack:
     secure: Kh7SvMa2sevlWT0PF7FoLtCmU7SMZsGQDg18MsHyIoCUgae1iXb2kv2ppWM5S/lfMWzG3GSUSp+IgpYvp2lVD2XKn97zzzXznIQA9WMeOm1xhiX0eRllRO81ttnaTeyJ8YCGvw02RvuTbEsq+skHsKAfRO59H+ncxcZn4m5oRxsbv1B+Szry5uADINEXB7CK6c7uDz4fY5YBO1P0pEyB5QYZVy8ImJSPSCnmfXftwd4JHUWNliOK0Nkt0dDN60DB1Z3KJyM9RAPwaP7Qfr0+cnzsp0iHE+8NSRxvmAH49ORDjciXp8NBT54YEgyDTTdGnQSgssQdGXEAMwC7rPR/82/w1IdqZFxBXy6tUoZakbWMnYt7DG8dKBNZTd9HG+h0kXDymv8FPOmG8UkN7YGMjRxGPXdX7YdNczucd2w5P4mXwT0gsclh/0suuJJhep4BwJqiokwvBAhRhDlYe9vzQ1Nxe5y63bAG+xj/THLJw/PFSiWsih3Q8Mvqa1ojDDcS0tLkxrbvYSy69Hsfnvy5smTz79UKF9sRsuLNdy66AdrTo2xZL6hDdQpLTbmlMOWVwtCMGk9qc1gf7ivj7bUtVlt8u+VPaG+dwJu89eJcLZnWiuG/WY+HVNzfqQHUewe+H47dg+aCRtr8ZRhCwzyRwXS6JOWDd3yL/IoUwm257tM=

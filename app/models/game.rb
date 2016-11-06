@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Game < ActiveRecord::Base
   has_many :pieces
   belongs_to :white_player

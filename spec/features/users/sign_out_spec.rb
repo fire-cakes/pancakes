@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 feature 'Sign out', :omniauth do
   scenario 'user signs out successfully' do
     signin
