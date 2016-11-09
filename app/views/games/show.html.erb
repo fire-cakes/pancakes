@@ -1,6 +1,6 @@
 <section class="board-container">
   <div class="board">
-    <% 8.times do |row| %>
+    <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
           <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
@@ -13,6 +13,8 @@
     <% end %>
   </div>
 </section>
+
+
 
 <script>
 $(function() {

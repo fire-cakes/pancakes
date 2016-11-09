@@ -35,9 +35,9 @@
 }
 
 .row:nth-child(odd) .square:nth-child(even), .row:nth-child(even) .square:nth-child(odd) {
- background-color: skyblue;
+ background-color: salmon;
 }
 
 .row:nth-child(even) .square:nth-child(even), .row:nth-child(odd) .square:nth-child(odd) {
- background-color: salmon;
+ background-color: skyblue;
 }
