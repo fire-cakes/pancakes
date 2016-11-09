@@ -21,7 +21,7 @@ class King < Piece
 	    true
 	  end
 
-	  def move_to
+	  def correct_moves
 	    piece = Piece.find(id)
 	    x0 = piece.x_coord
 	    y0 = piece.y_coord
@@ -45,6 +45,6 @@ class King < Piece
 	    valid_moves.push(left) if move_left
 	    valid_moves.push(right) if move_right
 
-	    valid_moves
+	    return valid_moves
 	end
 end
