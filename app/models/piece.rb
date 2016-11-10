@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
   belongs_to :game
@@ -70,16 +71,21 @@ class Piece < ActiveRecord::Base
     @new_x = new_x
     @new_y = new_y
     # piece cannot move to same position
-    return false if new_x == @x_coord && new_y == @y_coord
-
+    unless new_x != @x_coord && new_y != @y_coord
+      return false
+    end
     # piece cannot move on top of it's own color
-    return false if new_x == @new_x || new_y == @new_y
-
+    unless new_x != @new_x || new_y != @new_y
+      return false
+    end
     # piece cannot move off game board
-    return false if new_x >= @board_size && new_y >= @board_size
-
+    unless new_x <= @board_size && new_y <= @board_size
+      return false
+    end
     # no piece can be obstructed
-    return false if obstructed?(new_x, new_y)
+    unless obstructed?(new_x, new_y)
+      return false
+    end
     true
   end
 
