@@ -4,7 +4,6 @@ class Piece < ActiveRecord::Base
   belongs_to :game
   belongs_to :player
   belongs_to :board
-  belongs_to :user
 
   def self.types
     %w(Pawn Rook Knight Bishop Queen King)
@@ -106,7 +105,7 @@ class Piece < ActiveRecord::Base
 
   def move_to?(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
-      if return_piece(new_x, new_y).user_id != current_user
+      if return_piece(new_x, new_y).player_id != current_player
         capture_piece(new_x, new_y)
         update_attributes(x_coord: new_x, y_coord: new_y)
       end

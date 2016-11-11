@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class Player < ActiveRecord::Base
-  has_many :games
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  belongs_to :game
   has_many :pieces
 end

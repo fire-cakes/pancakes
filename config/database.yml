@@ -20,7 +20,7 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: postgres
+  playername: postgres
   password: password
   host: localhost
 
@@ -28,11 +28,11 @@ development:
   <<: *default
   database: pancake_chess_development
 # The specified database role being used to connect to postgres.
-  # To create additional roles in postgres see `$ createuser --help`.
+  # To create additional roles in postgres see `$ createplayer --help`.
   # When left blank, postgres will use the default role. This is
-  # the same name as the operating system user that initialized the database.
-  #username: APP_NAME
-# The password associated with the postgres role (username).
+  # the same name as the operating system player that initialized the database.
+  #playername: APP_NAME
+# The password associated with the postgres role (playername).
   #password:
 # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -41,7 +41,7 @@ development:
 # The TCP port the server listens on. Defaults to 5432.
   # If your server runs on a different port number, change accordingly.
   #port: 5432
-# Schema search path. The server defaults to $user,public
+# Schema search path. The server defaults to $player,public
   #schema_search_path: myapp,sharedapp,public
 # Minimum log levels, in increasing order:
   #   debug5, debug4, debug3, debug2, debug1,
@@ -66,7 +66,7 @@ test:
 # On Heroku and other platform providers, you may have a full connection URL
 # available as an environment variable. For example:
 #
-#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+#   DATABASE_URL="postgres://myplayer:mypass@localhost/somedatabase"
 #
 # You can use this database configuration with:
 #
