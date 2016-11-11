@@ -10,6 +10,18 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
+  def first_move?
+    self.piece.first_move
+  end
+
+  def white?
+    self.user == self.game.white_player
+  end
+
+  def black?
+    self.user == self.game.black_player
+  end
+
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
@@ -104,14 +116,23 @@ class Piece < ActiveRecord::Base
     game.reset_piece(x, y).update(captured: true)
   end
 
+  # update first_move to false if first_move?
+  def first_move_update
+    if first_move?
+      self.piece.first_move == false
+    end
+  end
+
   def move_to?(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).user_id != current_user
         capture_piece(new_x, new_y)
         update_attributes(x_coord: new_x, y_coord: new_y)
+        first_move_update
       end
     else
       update_attributes(x_coord: new_x, y_coord: new_y)
+      first_move_update
     end
   end
 end
