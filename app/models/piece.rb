@@ -11,15 +11,15 @@ class Piece < ActiveRecord::Base
   end
 
   def first_move?
-    self.piece.first_move
+    piece.first_move
   end
 
   def white?
-    self.user == self.game.white_player
+    user == game.white_player
   end
 
   def black?
-    self.user == self.game.black_player
+    user == game.black_player
   end
 
   # x1 and y1 being the destination coordinates

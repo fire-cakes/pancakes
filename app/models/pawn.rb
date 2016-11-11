@@ -15,15 +15,14 @@ class Pawn < Piece
     end
   end
 
-
   def valid_move?(x, y)
-    #call super and obstructed methods
+    call super and obstructed methods
     return false unless super(x, y)
     return false if obstructed?(x, y)
 
-    #prevent pawn from moving backwards
-    return false if white? && (y_coord - y > 0)
-    return false if black? && (y - y_coord > 0)
+    # prevent pawn from moving backwards
+    return false if white? && (y_coord - y).positive?
+    return false if black? && (y - y_coord).positive?
 
     # valid move logic for moving vertically
     if x_coord == x
@@ -40,9 +39,9 @@ class Pawn < Piece
       end
     end
 
-    #valid move logic for capturing a piece
+    # valid move logic for capturing a piece
     if ((x - x_coord).abs == 1) && ((y - y_coord).abs == 1)
-      if capture_move?(x,y)
+      if capture_move?(x, y)
         return true
       else
         return false
