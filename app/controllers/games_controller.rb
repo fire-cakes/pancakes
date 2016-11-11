@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class GamesController < ApplicationController
-  # before_action :authenticate_player!
+  before_action :authenticate_player!
+
   def index
-    # @games = Game.available
+    @avaliable_games = Game.available
   end
 
   def show
