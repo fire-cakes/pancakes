@@ -10,7 +10,6 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
-  # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
@@ -67,6 +66,29 @@ class Piece < ActiveRecord::Base
     obstruction
   end
 
+  def valid_move?(new_x, new_y)
+    @board_size = 7
+    @new_x = new_x
+    @new_y = new_y
+    # piece cannot move to same position
+    unless new_x != @x_coord && new_y != @y_coord
+      return false
+    end
+    # piece cannot move on top of it's own color
+    unless new_x != @new_x || new_y != @new_y
+      return false
+    end
+    # piece cannot move off game board
+    unless new_x <= @board_size && new_y <= @board_size
+      return false
+    end
+    # no piece can be obstructed
+    unless obstructed?(new_x, new_y)
+      return false
+    end
+    true
+  end
+
   # check if the position is filled
   def pos_filled?(x, y)
     pieces.active.where(x_coord: x, y_coord: y).any?
@@ -79,13 +101,9 @@ class Piece < ActiveRecord::Base
 
   # capture the piece
   def capture_piece(x, y)
-    game.ret_piece(x, y).update(captured: true)
+    game.reset_piece(x, y).update(captured: true)
   end
 
-  # this method will move a piece to new location and capture if appropriate
-  # TODO piece controller is being built by someone else right now,
-  # and updating the piece location will require an update method in that
-  # controller so it won't function correctly yet
   def move_to?(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).user_id != current_user

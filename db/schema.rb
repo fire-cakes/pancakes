@@ -12,10 +12,12 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20_161_023_204_308) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
   create_table 'games', force: true do |t|
+    t.integer  'users_id'
     t.string   'name'
     t.integer  'player_id'
     t.integer  'white_player_id'
@@ -27,6 +29,7 @@ ActiveRecord::Schema.define(version: 20_161_023_204_308) do
   end
 
   create_table 'pieces', force: true do |t|
+    t.integer  'users_id'
     t.integer  'player_id'
     t.string   'type'
     t.boolean  'color'
@@ -39,6 +42,7 @@ ActiveRecord::Schema.define(version: 20_161_023_204_308) do
   end
 
   create_table 'players', force: true do |t|
+    t.integer  'users_id'
     t.integer  'player_id'
     t.string   'username'
     t.string   'email'
@@ -63,4 +67,6 @@ ActiveRecord::Schema.define(version: 20_161_023_204_308) do
 
   add_index 'users', ['email'], name: 'index_users_on_email', unique: true, using: :btree
   add_index 'users', ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true, using: :btree
+
 end
+
