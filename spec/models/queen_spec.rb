@@ -18,13 +18,10 @@ RSpec.describe Queen, type: :model do
     it 'should be invalid queen moves' do
       queen = Piece.create(type: 'Queen', x_coord: 4, y_coord: 4)
       expect(queen.valid_move?(5, 6)).to be false
-      expect(queen.valid_move?(6, 6)).to be false
-      expect(queen.valid_move?(2, 2)).to be false
       expect(queen.valid_move?(6, 5)).to be false
       expect(queen.valid_move?(2, 5)).to be false
       expect(queen.valid_move?(5, 2)).to be false
       expect(queen.valid_move?(5, 6)).to be false
-      expect(queen.valid_move?(2, 6)).to be false
     end
   end
 end
