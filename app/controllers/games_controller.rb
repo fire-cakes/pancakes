@@ -24,13 +24,9 @@ class GamesController < ApplicationController
   end
 
   def update
-    @game = Game.find(params[:id])
-
-    if @game.update_attributes(params[:game])
-      redirect_to games_path, notice: 'New game ready'
-    else
-      render 'fail to load new game'
-    end
+    game = Game.find(params[:id])
+    game.update_attributes game_params
+    redirect_to game_path game
   end
 
   def destroy

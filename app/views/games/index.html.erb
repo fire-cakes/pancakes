@@ -11,7 +11,11 @@
 					<p>#<%= game.id %></p>
 					<p>Other things</p>
                 <br />
-			    <%= link_to 'Join', '#', class: 'btn btn-primary' %>
+					<%= simple_form_for game, url: game_path(game) do |f| %>
+		         <%= f.input :black_player_id, as: :hidden, input_html: { value: current_player.id } %>
+		         <%= f.input :game, as: :hidden, input_html: { value: game } %>
+		         <%= f.submit 'Join Game', action: :update, method: :patch, class: 'btn btn-primary' %>
+		       <% end %>
 			    			<br />
 			</div>
 
