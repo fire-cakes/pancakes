@@ -45,4 +45,20 @@ RSpec.describe Game, type: :model do
       expect(kings_game).to match_array kings_arr
     end
   end
+
+  context 'scopes' do
+    it 'avaliable returns avaliable games' do
+      g = FactoryGirl.create(:game, :with_one_player)
+      avaliable_games = Game.available
+
+      expect(avaliable_games).to include(g)
+    end
+
+    it 'returns nil when all games have two players' do
+      FactoryGirl.create(:game, :with_two_players)
+      avaliable_games = Game.available
+
+      expect(avaliable_games.any?).to be_falsey
+    end
+  end
 end
