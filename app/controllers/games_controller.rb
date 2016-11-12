@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class GamesController < ApplicationController
-  # before_action :authenticate_player!
+  before_action :authenticate_player!
+
   def index
-    # @games = Game.available
+    @avaliable_games = Game.available
   end
 
   def show
@@ -15,10 +16,8 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = game_params[:user_id]
-    @game = Game.create(user2_id: new_user_id, user_id: current_user.id)
-    @game.initialize_game_board!
-    redirct_to games_path(@available_game)
+    @game = Game.create(game_params)
+    redirect_to game_path(@game)
   end
 
   def edit
@@ -43,6 +42,10 @@ class GamesController < ApplicationController
   private
 
   def game_params
-    params.require(:game).permit(:user_id, :user2_id, :name, :white_player_id, :black_player_id)
+    params.require(:game).permit(
+      :name,
+      :white_player_id,
+      :black_player_id
+    )
   end
 end

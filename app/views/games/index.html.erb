@@ -1,24 +1,25 @@
 <div class="flex-container">
 
-	<% if @avaliable_game %>
-		<% @avaliable_game.each do |game| %>
+	<% if @avaliable_games %>
+		<div class="create-game-container">
+			<%= link_to 'Start New Game', new_game_path, class: 'btn btn-primary' %>
+		</div>
 
+		<% @avaliable_games.each do |game| %>
 			<div class="game-item-wrapper">
-			    <!-- games stuff goes here accessing game -->
-			    <%= image_tag("starting-game-board.png") %>
 			    <h4><%= game.name %></h4>
-			    <h5><%= game.players.count %></h5> 
-			    <p>Other things</p>
-			    <!-- Todo: add real path to link  join_game_path(game) -->
-			    <%= link_to 'New', '#', class: 'btn btn-primary' %>
+					<p>#<%= game.id %></p>
+					<p>Other things</p>
                 <br />
 			    <%= link_to 'Join', '#', class: 'btn btn-primary' %>
-			    <br />
-			    <%= link_to 'Cancel', '#', class: 'btn btn-primary', :confirm => "Are you sure?", :method => :delete %>
+			    			<br />
 			</div>
 
 		<% end %>
 		    <% else %>
 	            <h2>Waiting for a new player</h2>
+							<div class="create-game-container">
+								<%= link_to 'Start New Game', new_game_path, class: 'btn btn-primary' %>
+							</div>
 	<% end %>
 </div>

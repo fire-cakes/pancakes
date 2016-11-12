@@ -16,7 +16,6 @@ RSpec.describe King, type: :model do
     it 'should be invalid king moves' do
       king = Piece.create(type: 'King', x_coord: 4, y_coord: 4)
 
-      
       expect(king.valid_move?(5, 7)).to be false
       expect(king.valid_move?(7, 4)).to be false
       expect(king.valid_move?(2, 4)).to be false

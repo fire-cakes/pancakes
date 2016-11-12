@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class Game < ActiveRecord::Base
   has_many :pieces
-  belongs_to :white_player
-  belongs_to :black_player
+  has_one :white_player, class_name: 'Player', foreign_key: 'white_player_id'
+  has_one :black_player, class_name: 'Player', foreign_key: 'black_player_id'
+
+  scope :available, -> { where('white_player_id IS NULL OR black_player_id IS NULL') }
 
   after_create :populate_board!
   # creates 32 pieces upon start of game with initial x/y coordinates
-  # rubocop:disable AbcSize
   def populate_board!
     # white pieces
     # creates the 8 pawn pieces across the board
