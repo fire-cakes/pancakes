@@ -9,6 +9,7 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
+  # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
@@ -16,10 +17,10 @@ class Piece < ActiveRecord::Base
     x0 = x_coord
     y0 = y_coord
     # checks if destination is vertical, horizontal, or diagonal
-    x_diff = x0 - x1
-    y_diff = y0 - y1
+    x_diff = (x0 - x1).abs
+    y_diff = (y0 - y1).abs
     # array keeps list of coordinates of places between origin and destination
-    places_between = [[x1, y1]]
+    places_between = []
     current_coordinates = [x0, y0]
     back_to_start = false
     # iterates through each places in between origin and destination
@@ -43,8 +44,10 @@ class Piece < ActiveRecord::Base
                             [x1, y1]
                           elsif x_diff.zero?
                             [x0, y1]
-                          else
+                          elsif y_diff.zero?
                             [x1, y0]
+                          else
+                            raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
                           end
       end
     end
