@@ -43,8 +43,10 @@ class Piece < ActiveRecord::Base
                             [x1, y1]
                           elsif x_diff.zero?
                             [x0, y1]
-                          else
+                          elsif y_diff.zero?
                             [x1, y0]
+                          else
+                            raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
                           end
       end
     end

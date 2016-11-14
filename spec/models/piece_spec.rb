@@ -15,10 +15,16 @@ RSpec.describe Piece, type: :model do
       g = FactoryGirl.create(:game, :with_two_players, :obstruction)
       p1 = g.pieces.find_by(x_coord: 0, y_coord: 5)
       p2 = g.pieces.find_by(x_coord: 0, y_coord: 7)
-      
+
       expect(p1.obstructed?(2, 3)).to be false
       expect(p2.obstructed?(0, 5)).to be false
       expect(p2.obstructed?(2, 7)).to be false
+    end
+    it "should return an error if the move is not a vertical, horizontal, or diagonal move" do
+      g = FactoryGirl.create(:game, :with_two_players, :obstruction)
+      p = g.pieces.find_by(x_coord: 3, y_coord: 3)
+      
+      expect{p.obstructed?(1, 4)}.to raise_error(RuntimeError)
     end
   end
 end
