@@ -46,16 +46,16 @@ class Game < ActiveRecord::Base
     Queen.create(game_id: id, x_coord: 3, y_coord: 7, color: false, captured: false)
     King.create(game_id: id, x_coord: 4, y_coord: 7, color: false, captured: false)
   end
-  
+
   def check?(player_color)
-    king = pieces.find_by(type:'King', color: player_color)
+    king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board
-    opponent_pieces = pieces.where("color != ? AND captured != ?", player_color, true).to_a
+    opponent_pieces = pieces.where('color != ? AND captured != ?', player_color, true).to_a
     opponent_pieces.each do |p|
       if p.valid_move?(king.x_coord, king.y_coord)
         return true
       end
     end
-    return false
+    false
   end
 end

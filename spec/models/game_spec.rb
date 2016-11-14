@@ -61,14 +61,14 @@ RSpec.describe Game, type: :model do
       expect(avaliable_games.any?).to be_falsey
     end
   end
-  
+
   context 'check?' do
     it 'returns true when there is a check in the game' do
-      g= FactoryGirl.create(:game, :with_two_players, :check_scenario)
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario)
       # check if black (color: false) king is in check
       expect(g.check?(false)).to be true
     end
-    
+
     it 'returns false when there are no checks in the game' do
       g = FactoryGirl.create(:game, :with_two_players)
       expect(g.check?(false)).to be false

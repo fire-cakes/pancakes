@@ -13,7 +13,7 @@ FactoryGirl.define do
       white_player_id 1
       black_player_id 2
     end
-    
+
     trait :check_scenario do
       after :create do |g|
         g.pieces.destroy_all
