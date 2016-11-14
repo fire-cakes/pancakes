@@ -22,7 +22,7 @@ FactoryGirl.define do
         g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false, captured: false)
       end
     end
-    
+
     trait :obstruction do
       after :create do |g|
         g.pieces.destroy_all
@@ -56,7 +56,6 @@ FactoryGirl.define do
         g.pieces.create(type: 'Bishop', x_coord: 7, y_coord: 5, color: false, first_move: false, captured: false)
         g.pieces.create(type: 'Pawn', x_coord: 2, y_coord: 3, color: false, first_move: false, captured: false)
         g.pieces.create(type: 'Knight', x_coord: 3, y_coord: 3, color: true, first_move: false, captured: false)
-        
       end
     end
   end
