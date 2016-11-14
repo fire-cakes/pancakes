@@ -18,8 +18,8 @@ FactoryGirl.define do
       after :create do |g|
         g.pieces.destroy_all
         # white rook checks black king
-        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
-        g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
+        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+        g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false, captured: false)
       end
     end
   end

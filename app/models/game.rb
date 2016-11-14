@@ -14,40 +14,48 @@ class Game < ActiveRecord::Base
     8.times do |i|
       # sets game_id in Piece model to current id in Game
       # color is boolean - true for white, false for black
-      Pawn.create(game_id: id, x_coord: i, y_coord: 1, color: true)
+      Pawn.create(game_id: id, x_coord: i, y_coord: 1, color: true, captured: false)
     end
     # creates the 2 rook, knight, and bishop pieces on opposite sides of the board
     (0..7).step(7) do |i|
-      Rook.create(game_id: id, x_coord: i, y_coord: 0, color: true)
+      Rook.create(game_id: id, x_coord: i, y_coord: 0, color: true, captured: false)
     end
     (1..7).step(5) do |i|
-      Knight.create(game_id: id, x_coord: i, y_coord: 0, color: true)
+      Knight.create(game_id: id, x_coord: i, y_coord: 0, color: true, captured: false)
     end
     (2..7).step(3) do |i|
-      Bishop.create(game_id: id, x_coord: i, y_coord: 0, color: true)
+      Bishop.create(game_id: id, x_coord: i, y_coord: 0, color: true, captured: false)
     end
 
-    Queen.create(game_id: id, x_coord: 3, y_coord: 0, color: true)
-    King.create(game_id: id, x_coord: 4, y_coord: 0, color: true)
+    Queen.create(game_id: id, x_coord: 3, y_coord: 0, color: true, captured: false)
+    King.create(game_id: id, x_coord: 4, y_coord: 0, color: true, captured: false)
 
     # black pieces
     8.times do |i|
-      Pawn.create(game_id: id, x_coord: i, y_coord: 6, color: false)
+      Pawn.create(game_id: id, x_coord: i, y_coord: 6, color: false, captured: false)
     end
     (0..7).step(7) do |i|
-      Rook.create(game_id: id, x_coord: i, y_coord: 7, color: false)
+      Rook.create(game_id: id, x_coord: i, y_coord: 7, color: false, captured: false)
     end
     (1..7).step(5) do |i|
-      Knight.create(game_id: id, x_coord: i, y_coord: 7, color: false)
+      Knight.create(game_id: id, x_coord: i, y_coord: 7, color: false, captured: false)
     end
     (2..7).step(3) do |i|
-      Bishop.create(game_id: id, x_coord: i, y_coord: 7, color: false)
+      Bishop.create(game_id: id, x_coord: i, y_coord: 7, color: false, captured: false)
     end
-    Queen.create(game_id: id, x_coord: 3, y_coord: 7, color: false)
-    King.create(game_id: id, x_coord: 4, y_coord: 7, color: false)
+    Queen.create(game_id: id, x_coord: 3, y_coord: 7, color: false, captured: false)
+    King.create(game_id: id, x_coord: 4, y_coord: 7, color: false, captured: false)
   end
   
-  def check?
+  def check?(player_color)
+    king = pieces.find_by(type:'King', color: player_color)
+    # array of opponent pieces still on the board
+    opponent_pieces = pieces.where("color != ? AND captured != ?", player_color, true).to_a
+    opponent_pieces.each do |p|
+      if p.valid_move?(king.x_coord, king.y_coord)
+        return true
+      end
+    end
     return false
   end
 end
