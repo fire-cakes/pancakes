@@ -46,4 +46,8 @@ class Game < ActiveRecord::Base
     Queen.create(game_id: id, x_coord: 3, y_coord: 7, color: false)
     King.create(game_id: id, x_coord: 4, y_coord: 7, color: false)
   end
+  
+  def check?
+    return false
+  end
 end

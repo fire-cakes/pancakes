@@ -13,5 +13,14 @@ FactoryGirl.define do
       white_player_id 1
       black_player_id 2
     end
+    
+    trait :check_scenario do
+      after :create do |g|
+        g.pieces.destroy_all
+        # white rook checks black king
+        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
+        g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
+      end
+    end
   end
 end
