@@ -14,12 +14,43 @@ FactoryGirl.define do
       black_player_id 2
     end
 
-    trait :check_scenario do
+    # Test horizontal check
+    trait :check_scenario1 do
       after :create do |g|
         g.pieces.destroy_all
         # white rook checks black king
         g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
         g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false, captured: false)
+      end
+    end
+
+    # Test vertical check
+    trait :check_scenario2 do
+      after :create do |g|
+        g.pieces.destroy_all
+        # white rook checks black king
+        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+        g.pieces.create(type: 'Rook', x_coord: 0, y_coord: 4, color: true, first_move: false, captured: false)
+      end
+    end
+
+    # Test diagonal check
+    trait :check_scenario3 do
+      after :create do |g|
+        g.pieces.destroy_all
+        # white rook checks black king
+        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+        g.pieces.create(type: 'Bishop', x_coord: 2, y_coord: 5, color: true, first_move: false, captured: false)
+      end
+    end
+
+    # Test knight check
+    trait :check_scenario4 do
+      after :create do |g|
+        g.pieces.destroy_all
+        # white rook checks black king
+        g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+        g.pieces.create(type: 'Knight', x_coord: 2, y_coord: 6, color: true, first_move: false, captured: false)
       end
     end
 

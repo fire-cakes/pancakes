@@ -63,9 +63,24 @@ RSpec.describe Game, type: :model do
   end
 
   context 'check?' do
-    it 'returns true when there is a check in the game' do
-      g = FactoryGirl.create(:game, :with_two_players, :check_scenario)
+    it 'returns true when there is a check in the game from a horizontal attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario1)
       # check if black (color: false) king is in check
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a vertical attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario2)
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a diagonal attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario3)
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a knight attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario4)
       expect(g.check?(false)).to be true
     end
 
