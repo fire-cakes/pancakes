@@ -7,6 +7,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @pieces = Piece.find(params[:piece_id])
     @game = Game.find(params[:id])
     @pieces = @game.pieces
   end
@@ -33,6 +34,11 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @game.destroy
     redirect_to games_path, notice: 'Your game has been cancel'
+  end
+
+  def move_to!
+    @piece.update_attributes piece_params
+    redirect_to game_path @pieces.game
   end
 
   private
