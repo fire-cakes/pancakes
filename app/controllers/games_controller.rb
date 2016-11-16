@@ -7,7 +7,6 @@ class GamesController < ApplicationController
   end
 
   def show
-    @pieces = Piece.find(params[:piece_id])
     @game = Game.find(params[:id])
     @pieces = @game.pieces
   end
@@ -22,6 +21,8 @@ class GamesController < ApplicationController
   end
 
   def edit
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces
   end
 
   def update
