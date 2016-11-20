@@ -93,12 +93,12 @@ class Piece < ActiveRecord::Base
 
   # check if white piece
   def white?
-    return color
+    color
   end
  
   # check if black piece
   def black?
-   return ! color
+   !color
   end
 
   # check if the position is filled
@@ -109,7 +109,7 @@ class Piece < ActiveRecord::Base
   # return the piece at that location
   def return_piece(x, y)
     piece = Piece.find(x_coord: x, y_coord: y)
-    return piece
+    piece
   end
 
   # capture the piece
@@ -119,7 +119,7 @@ class Piece < ActiveRecord::Base
 
   # change first_move to false
   def set_first_move_false!
-    first_move ? first_move == false : first_move == false
+    first_move == false if first_move
   end
 
   def move_to?(new_x, new_y)
