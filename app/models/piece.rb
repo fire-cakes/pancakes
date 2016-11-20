@@ -91,6 +91,16 @@ class Piece < ActiveRecord::Base
     true
   end
 
+  # check if white piece
+  def white?
+    return color
+  end
+ 
+  # check if black piece
+  def black?
+   return ! color
+  end
+
   # check if the position is filled
   def pos_filled?(x, y)
     pieces.active.where(x_coord: x, y_coord: y).any?
@@ -98,7 +108,8 @@ class Piece < ActiveRecord::Base
 
   # return the piece at that location
   def return_piece(x, y)
-    pieces.active.find(x_coord: x, y_coord: y)
+    piece = Piece.find(x_coord: x, y_coord: y)
+    return piece
   end
 
   # capture the piece
@@ -106,14 +117,21 @@ class Piece < ActiveRecord::Base
     game.reset_piece(x, y).update(captured: true)
   end
 
+  # change first_move to false
+  def set_first_move_false!
+    first_move ? first_move == false : first_move == false
+  end
+
   def move_to?(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).player_id != current_player
         capture_piece(new_x, new_y)
         update_attributes(x_coord: new_x, y_coord: new_y)
+        set_first_move_false!
       end
     else
       update_attributes(x_coord: new_x, y_coord: new_y)
+      set_first_move_false!
     end
   end
 end
