@@ -9,8 +9,6 @@ class PiecesController < ApplicationController
   def update
     @piece = Piece.find(params[:piece_id])
     @game = @piece.game
-    @piece.update_attributes piece_params
-    redirect_to game_path
   end
 
   def edit
@@ -21,11 +19,17 @@ class PiecesController < ApplicationController
     if !@piece.move_to!(params[:x_coord], params[:y_coord])
       flash[:notice] = 'invalid move'
     else
-      redirect_to game_path
+      redirect_to game_path(@piece.game)
     end
   end
 
-  def move_to!
+  def move_to!(new_x, new_y)
+      if return_piece(new_x, new_y).player_id != current_player
+        capture_piece(new_x, new_y)
+        update_attributes(x_coord: new_x, y_coord: new_y)
+      end
+      @piece.update_attributes piece_params
+      redirect_to game_path
   end
 
   private
