@@ -37,11 +37,6 @@ class GamesController < ApplicationController
     redirect_to games_path, notice: 'Your game has been cancel'
   end
 
-  def move_to!
-    @piece.update_attributes piece_params
-    redirect_to game_path @pieces.game
-  end
-
   private
 
   def game_params
