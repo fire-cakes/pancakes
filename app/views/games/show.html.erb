@@ -3,9 +3,11 @@
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
-          <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
+          <div class="square" data-x-coord="<%=column%>" data-y-coord="<%=row%>">
              <% if @pieces.where(x_coord: column, y_coord: row).present? %>
-                <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
+                  <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                </span>
              <% end%>
           </div>
         <% end %>
