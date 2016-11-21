@@ -9,6 +9,8 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
+  current_game = self
+
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
@@ -108,6 +110,7 @@ class Piece < ActiveRecord::Base
 
   # return the piece at that location
   def return_piece(x, y)
+    # current_game.pieces.where(x_coord: x, y_coord: y).any? ? current_game.pieces.where(x_coord: x, y_coord: y) : false
     Piece.where(x_coord: x, y_coord: y).any? ? Piece.where(x_coord: x, y_coord: y) : false
   end
 
@@ -129,7 +132,7 @@ class Piece < ActiveRecord::Base
         set_first_move_false!
       end
     else
-      update_attributes(x_coord: new_x, y_coord: new_y)
+      update_attributes(x_coord: x, y_coord: y)
       set_first_move_false!
     end
   end
