@@ -9,11 +9,13 @@ class PiecesController < ApplicationController
     end
   end
 
-  def move_to!(new_x, new_y)
-      if return_piece(piece_params).player_id != current_player
-        capture_piece(piece_params)
-      @piece.update_attributes piece_params
+  def move_to!(_new_x, _new_y)
+    @piece.update_attributes piece_params
+    if return_piece(piece_params).player_id != current_player
+      capture_piece(piece_params)
+    else
       redirect_to game_path
+    end
   end
 
   def update
