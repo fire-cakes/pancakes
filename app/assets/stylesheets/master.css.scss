@@ -1,6 +1,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
-
+@import url('https://fonts.googleapis.com/css?family=Bungee+Shade|Raleway');
 
 
 .navbar.navbar-inverse {
@@ -10,16 +10,15 @@
 }
 
 .navbar-inverse .navbar-brand {
-    color: #feff00;
-    font-family: 'intro_rust_gbase_2_line';
+    color: #abcdef;
+    font-family: 'Bungee Shade', sans-serif;
     font-size: 25px;
 }
 
 body {
-  background: url('/assets/chess2.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center; 
+  background: url('/assets/p5.png');
+  background-repeat: repeat;
+  font-family: 'Raleway', sans-serif;
 }
 
 body:before {
@@ -31,7 +30,7 @@ body:before {
     left:0;
     top:0;
     z-index:-1;
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.56);
 }
 
 .flex-container {
