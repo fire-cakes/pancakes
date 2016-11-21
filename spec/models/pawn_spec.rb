@@ -17,16 +17,16 @@ RSpec.describe Pawn, type: :model do
 
     it 'allows valid diagonal move' do
       pawn = Piece.create(type: 'Pawn', x_coord: 4, y_coord: 2, first_move: true, color: true)
-      piece2 = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece2 = Piece.create(type: 'Queen', x_coord: 3, y_coord: 3, first_move: true, color: false)
       expect(pawn.valid_move?(3, 3)).to be true
     end
 
     it 'does not allow other invalid moves' do
       pawn = Piece.create(type: 'Pawn', x_coord: 4, y_coord: 2, first_move: true, color: true)
-      piece2 = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece2 = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
       expect(pawn.valid_move?(3, 2)).to be false
       expect(pawn.valid_move?(2, 7)).to be false
-      expect(pawn.valid_move?(4, 5)).to be false
+      expect(pawn.valid_move?(3, 3)).to be false
       expect(pawn.valid_move?(4, 6)).to be false
     end
   end

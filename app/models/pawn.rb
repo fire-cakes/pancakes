@@ -5,13 +5,15 @@ class Pawn < Piece
   end
 
   def capture_move?(x, y)
-    piece = return_piece(x, y)
-    if piece.nil?
+    if return_piece(x, y) != false
+      if (return_piece(x, y).select(:color).map(&:color) == [true] && color == true) ||
+         (return_piece(x, y).select(:color).map(&:color) == [false] && color == false)
+        return false
+      else
+        return true
+      end
+    else
       return false
-    elsif piece.color == color
-      return false
-    else 
-      return true
     end
   end
 
@@ -40,16 +42,8 @@ class Pawn < Piece
 
     # valid move logic for moving diagonal capturing a piece
     if ((x - x_coord).abs == 1) && ((y - y_coord).abs == 1)
-      return true
-    else
-      false
-      # if capture_move?(x, y)
-      #   return true
-      # else
-      #   return false
-      # end
+      return capture_move?(x, y)
     end
-
     false
   end
 end
