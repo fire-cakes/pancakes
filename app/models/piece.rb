@@ -106,7 +106,7 @@ class Piece < ActiveRecord::Base
     game.reset_piece(x, y).update(captured: true)
   end
 
-  def move_to?(new_x, new_y)
+  def move_to!(new_x, new_y)
     if pos_filled?(new_x, new_y) == true
       if return_piece(new_x, new_y).player_id != current_player
         capture_piece(new_x, new_y)
