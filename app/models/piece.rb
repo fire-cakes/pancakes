@@ -95,7 +95,7 @@ class Piece < ActiveRecord::Base
   def white?
     color
   end
- 
+
   # check if black piece
   def black?
     !color
