@@ -5,20 +5,20 @@ class Pawn < Piece
   end
 
   def capture_move?(x, y)
-    if return_piece(x, y) != false
+    if return_piece(x, y)
       if (return_piece(x, y).select(:color).map(&:color) == [true] && color == true) ||
          (return_piece(x, y).select(:color).map(&:color) == [false] && color == false)
-        return false
+        false
       else
-        return true
+        true
       end
     else
-      return false
+      false
     end
   end
 
   def valid_move?(x, y)
-    # call super 
+    # call super
     # return false unless super
 
     # prevent pawn from moving backwards

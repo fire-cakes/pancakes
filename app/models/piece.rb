@@ -9,8 +9,6 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
-  current_game = self
-
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
@@ -100,7 +98,7 @@ class Piece < ActiveRecord::Base
  
   # check if black piece
   def black?
-   !color
+    !color
   end
 
   # check if the position is filled
@@ -110,8 +108,8 @@ class Piece < ActiveRecord::Base
 
   # return the piece at that location
   def return_piece(x, y)
-    # current_game.pieces.where(x_coord: x, y_coord: y).any? ? current_game.pieces.where(x_coord: x, y_coord: y) : false
-    Piece.where(x_coord: x, y_coord: y).any? ? Piece.where(x_coord: x, y_coord: y) : false
+    current_game = Game.find(game_id)
+    current_game.pieces.where(x_coord: x, y_coord: y).any? ? current_game.pieces.where(x_coord: x, y_coord: y) : false
   end
 
   # capture the piece

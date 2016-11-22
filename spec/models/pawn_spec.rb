@@ -23,7 +23,7 @@ RSpec.describe Pawn, type: :model do
       g = FactoryGirl.create(:game, :with_two_players)
       g.pieces.destroy_all
       pawn = g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 2, first_move: true, color: true)
-      piece2 = g.pieces.create(type: 'Queen', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      g.pieces.create(type: 'Queen', x_coord: 3, y_coord: 3, first_move: true, color: false)
       expect(pawn.valid_move?(3, 3)).to be true
     end
 
@@ -31,7 +31,7 @@ RSpec.describe Pawn, type: :model do
       g = FactoryGirl.create(:game, :with_two_players)
       g.pieces.destroy_all
       pawn = g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 2, first_move: true, color: true)
-      piece2 = g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
       expect(pawn.valid_move?(3, 2)).to be false
       expect(pawn.valid_move?(2, 7)).to be false
       expect(pawn.valid_move?(3, 3)).to be false

@@ -31,9 +31,9 @@ RSpec.describe Piece, type: :model do
   context 'pos_filled?' do
     it 'should return true if there is a piece at the inputted location' do
       piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
-      piece2 = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 7, first_move: true, color: false)
-      expect(piece.pos_filled?(3,7)).to be true
-      expect(piece.pos_filled?(4,7)).to be false
+      Piece.create(type: 'Pawn', x_coord: 3, y_coord: 7, first_move: true, color: false)
+      expect(piece.pos_filled?(3, 7)).to be true
+      expect(piece.pos_filled?(4, 7)).to be false
     end
   end
 
@@ -42,11 +42,11 @@ RSpec.describe Piece, type: :model do
       g = FactoryGirl.create(:game, :with_two_players)
       g.pieces.destroy_all
       piece = g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false, player_id: 1)
-      piece2 = g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 7, first_move: true, color: false, player_id: 2)
-      piece3 = g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 7, first_move: true, color: true, player_id: 2)
-      expect(piece.return_piece(3,7) === Piece.where(x_coord: 3, y_coord: 7)).to be true
-      expect(piece.return_piece(4,7) == Piece.where(x_coord: 4, y_coord: 7)).to be true
-      expect(piece.return_piece(3,1) == Piece.where(x_coord: 3, y_coord: 1)).to be false
+      g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 7, first_move: true, color: false, player_id: 2)
+      g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 7, first_move: true, color: true, player_id: 2)
+      expect(piece.return_piece(3, 7) == Piece.where(x_coord: 3, y_coord: 7)).to be true
+      expect(piece.return_piece(4, 7) == Piece.where(x_coord: 4, y_coord: 7)).to be true
+      expect(piece.return_piece(3, 1) == Piece.where(x_coord: 3, y_coord: 1)).to be false
     end
   end
 end
