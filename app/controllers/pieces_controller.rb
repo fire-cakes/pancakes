@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PiecesController < ApplicationController
   def update
     @piece = Piece.find(params[:id])
@@ -5,9 +6,9 @@ class PiecesController < ApplicationController
 
     @piece.attempt_move(piece_params)
 
-      render json: {
-        update_url: game_path(@game)
-      }
+    render json: {
+      update_url: game_path(@game)
+    }
   end
 
   private
@@ -19,5 +20,4 @@ class PiecesController < ApplicationController
       :type
     )
   end
-
 end

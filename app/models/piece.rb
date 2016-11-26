@@ -13,17 +13,17 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       # return false unless game.full? # ensure two players before move
       return false unless piece.right_color? # ensure same color as turn
-      fail ActiveRecord::Rollback unless move_to(params)
+      raise ActiveRecord::Rollback unless move_to(params)
       # fail ActiveRecord::Rollback if game.check?(color)
 
-      # TODO game.increment_turn once merged
+      # TODO: game.increment_turn once merged
       # TODO update current state of check, checkmate, etc.
     end
   end
 
-  #def right_color?
+  # def right_color?
   #  color == @game.white_turn?
-  #end
+  # end
 
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
