@@ -12,7 +12,6 @@
           </div>
         <% end %>
       </div>
-    <% end %>
   </div>
 </section>
 
@@ -32,9 +31,7 @@ $(function() {
     var cw = $(selector).width();
     $(selector).css({'height':cw*2+'px'});
   }
-
   equalHeight('.square');
-
   $( window ).resize(function() {
     equalHeight('.square');
   })

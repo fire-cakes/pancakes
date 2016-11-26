@@ -1,0 +1,34 @@
+<section class="board-container">
+  <div class="board">
+    <% 7.downto(0) do |row| %>
+
+      <div class="row <%= row.even? ? 'even' : 'odd' %>">
+        <% 8.times do |column| %>
+          <% @piece = @pieces.where(x_coord: column, y_coord: row) %>
+          <%= link_to edit_game_path(id: @game.id, x_coord: column, y_coord: row) do %>
+            <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
+               <% if @piece.present? %>
+                  <%= @piece.first.image.html_safe %>
+               <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+
+
+<script>
+$(function() {
+  function equalHeight(selector){
+    var cw = $(selector).width();
+    $(selector).css({'height':cw*2+'px'});
+  }
+  equalHeight('.square');
+  $( window ).resize(function() {
+    equalHeight('.square');
+  })
+})
+</script>
