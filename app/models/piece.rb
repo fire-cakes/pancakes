@@ -118,12 +118,9 @@ class Piece < ActiveRecord::Base
   end
 
   def move_to!(new_x, new_y)
-    if pos_filled?(new_x, new_y) == true
-      if return_piece(new_x, new_y).player_id != current_player
-        capture_piece(new_x, new_y)
-        update_attributes(x_coord: new_x, y_coord: new_y)
-      end
-    end
+    return unless !pos_filled?(new_x, new_y) || return_piece(new_x, new_y).player_id == current_player
+    capture_piece(new_x, new_y)
+    update_attributes(x_coord: new_x, y_coord: new_y)
   end
 
   # change first_move to false
@@ -132,7 +129,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move_to?(x, y)
-    if pos_filled?(x, y) == true
+    if pos_filled?(x, y)
       if return_piece(x, y).player_id != current_player
         capture_piece(x, y)
         update_attributes(x_coord: x, y_coord: y)
