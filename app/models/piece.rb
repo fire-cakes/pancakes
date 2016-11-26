@@ -21,10 +21,6 @@ class Piece < ActiveRecord::Base
     end
   end
 
-  # def right_color?
-  #  color == @game.white_turn?
-  # end
-
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
   def obstructed?(x1, y1)
@@ -115,6 +111,11 @@ class Piece < ActiveRecord::Base
   # check if black piece
   def black?
     !color
+  end
+
+  # check if moving piece matches turn's color
+  def right_color?
+    white? && game.white_turn? || black? && game.black_turn?
   end
 
   # check if the position is filled

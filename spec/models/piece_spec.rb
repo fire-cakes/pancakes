@@ -37,6 +37,46 @@ RSpec.describe Piece, type: :model do
     end
   end
 
+  context 'colors' do
+    it 'white? should return true if color is white' do
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      expect(piece.white?).to be true
+    end
+    it 'white? should return false if color is black' do
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      expect(piece.white?).to be false
+    end
+    it 'black? should return true if color is black' do
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      expect(piece.black?).to be true
+    end
+    it 'black? should return false if color is white' do
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      expect(piece.black?).to be false
+    end
+    it 'right_color? should return true for black piece on black turns' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      game.increment_turn
+      piece = game.pieces.where(color: false).last
+
+      expect(piece.right_color?).to be true
+    end
+    it 'right_color? should return true for white piece on white turns' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      piece = game.pieces.where(color: true).last
+
+      expect(piece.right_color?).to be true
+    end
+    it 'right_color? should return false for pieces moving when not turn' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      game.increment_turn
+      piece = game.pieces.where(color: true).last
+
+      expect(piece.right_color?).to be false
+    end
+
+  end
+
   context 'return_piece' do
     it 'should return the piece at the given location' do
       g = FactoryGirl.create(:game, :with_two_players)
