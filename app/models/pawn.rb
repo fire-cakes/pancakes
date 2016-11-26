@@ -44,24 +44,23 @@ class Pawn < Piece
     false
   end
 
-  def promote(x, y)
-    if (white? && y == 7) || (black? && y = 0)
-      print "Promote your pawn to a queen, knight, rook, or bishop (q, k, r, b)?"
-      STDOUT.flush  
+  def promote(y)
+    if (white? && y == 7) || (black? && y == 0)
+      print 'Promote your pawn to a queen, knight, rook, or bishop (q, k, r, b)?'
       new_piece = gets.chomp 
-      unless ['q', 'k', 'r', 'b'].include? new_piece.downcase 
-        print "Please select a valid piece (q, k, r, b)?"
-        new_piece = gets.chomp 
-      end      
-      case new_piece.downcase[0,1]
-      when "q"
-        update_attributes(type: "Queen")
-      when "k"
-        update_attributes(type: "Knight")
-      when "r"
-        update_attributes(type: "Rook")
-      when "b"
-        update_attributes(type: "Bishop")
+      unless %w(q k r b).include? new_piece.downcase
+      print 'Please select a valid piece (q, k, r, b)?'
+        new_piece = gets.chomp
+      end
+      case new_piece.downcase[0, 1]
+      when 'q'
+        update_attributes(type: 'Queen')
+      when 'k'
+        update_attributes(type: 'Knight')
+      when 'r'
+        update_attributes(type: 'Rook')
+      when 'b'
+        update_attributes(type: 'Bishop')
       end
     end
   end

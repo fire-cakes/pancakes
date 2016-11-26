@@ -45,7 +45,7 @@ RSpec.describe Pawn, type: :model do
       g.pieces.destroy_all
       pawn = g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 6, color: true)
       puts "Enter letter 'q' for rspec test to pass, an invalid letter to get reprompt, and 'r', 'b', or 'k' to fail."
-      pawn.promote(4, 7)
+      pawn.promote(7)
       expect(pawn.type).to eq('Queen')
     end
   end
