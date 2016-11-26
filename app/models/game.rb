@@ -47,6 +47,18 @@ class Game < ActiveRecord::Base
     King.create(game_id: id, x_coord: 4, y_coord: 7, color: false, captured: false)
   end
 
+  def increment_turn
+    self.turn += 1
+  end
+
+  def white_turn?
+    self.turn.odd?
+  end
+
+  def black_turn?
+    self.turn.even?
+  end
+
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board

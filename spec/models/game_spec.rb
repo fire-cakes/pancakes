@@ -46,6 +46,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  context 'turns' do
+    it 'increments by one' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      expect(game.turn).to be(1)
+      game.increment_turn
+      expect(game.turn).to be(2)
+      game.increment_turn
+      expect(game.turn).to be(3)
+    end
+    it 'odd turns are white' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      expect(game.white_turn?).to be true
+      expect(game.black_turn?).to be false
+    end
+    it 'even turns are black' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      game.increment_turn
+      expect(game.black_turn?).to be true
+      expect(game.white_turn?).to be false
+    end
+  end
+
   context 'scopes' do
     it 'avaliable returns avaliable games' do
       g = FactoryGirl.create(:game, :with_one_player)
