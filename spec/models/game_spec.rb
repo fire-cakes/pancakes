@@ -46,6 +46,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  context 'turns' do
+    it 'increments by one' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      expect(game.turn).to be(1)
+      game.increment_turn
+      expect(game.turn).to be(2)
+      game.increment_turn
+      expect(game.turn).to be(3)
+    end
+    it 'odd turns are white' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      expect(game.white_turn?).to be true
+      expect(game.black_turn?).to be false
+    end
+    it 'even turns are black' do
+      game = FactoryGirl.create(:game, :with_two_players)
+      game.increment_turn
+      expect(game.black_turn?).to be true
+      expect(game.white_turn?).to be false
+    end
+  end
+
   context 'scopes' do
     it 'avaliable returns avaliable games' do
       g = FactoryGirl.create(:game, :with_one_player)
@@ -59,6 +81,34 @@ RSpec.describe Game, type: :model do
       avaliable_games = Game.available
 
       expect(avaliable_games.any?).to be_falsey
+    end
+  end
+
+  context 'check?' do
+    it 'returns true when there is a check in the game from a horizontal attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario1)
+      # check if black (color: false) king is in check
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a vertical attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario2)
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a diagonal attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario3)
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns true when there is a check in the game from a knight attack' do
+      g = FactoryGirl.create(:game, :with_two_players, :check_scenario4)
+      expect(g.check?(false)).to be true
+    end
+
+    it 'returns false when there are no checks in the game' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      expect(g.check?(false)).to be false
     end
   end
 end

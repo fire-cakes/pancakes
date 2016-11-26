@@ -4,7 +4,7 @@ class Knight < Piece
     color ? '&#9816;' : '&#9822;'
   end
 
-  def legal_move?(x1, y1)
+  def valid_move?(x1, y1)
     return false if x_coord == x1
     return false if y_coord == y1
     proper_length?(x1, y1)
