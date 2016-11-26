@@ -3,9 +3,11 @@
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
-          <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
+          <div class="square" data-x-coord="<%=column%>" data-y-coord="<%=row%>">
              <% if @pieces.where(x_coord: column, y_coord: row).present? %>
-                <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
+                  <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                </span>
              <% end%>
           </div>
         <% end %>
@@ -14,10 +16,18 @@
   </div>
 </section>
 
-
+<div class="notices">
+  <p>Piece selected: <span id="selected-piece"></span></p>
+  <p>Square selected: <span id="selected-square"></span></p>
+</div>
 
 <script>
 $(function() {
+  // declare variables
+  var square, piece;
+  var selectedPieceID, selectedSquareXCoord, selectedSquareYCoord;
+
+  // for sizing the board
   function equalHeight(selector){
     var cw = $(selector).width();
     $(selector).css({'height':cw*2+'px'});
@@ -28,5 +38,41 @@ $(function() {
   $( window ).resize(function() {
     equalHeight('.square');
   })
+
+  // after clicking a piece get its id
+  $(".piece").click(function (event) {
+
+    piece = event.target;
+    selectedPieceID = $(piece).attr("data-piece");
+
+  // set class of piece to selected
+    $(".piece").removeClass("selected");
+    $(piece).addClass("selected");
+
+  // show it in the view
+    $('#selected-piece').text(selectedPieceID);
+  });
+
+  // after square its coords
+  $(".square").click(function (event) {
+
+    if ($($(event.target)[0]).hasClass('piece')) {
+      square = $(event.target).parent()[0]
+    } else {
+      square = event.target;
+    }
+
+    selectedSquareXCoord = $(square).attr("data-x-coord");
+    selectedSquareYCoord = $(square).attr("data-y-coord");
+
+  // set class of piece to selected
+    $(".square").removeClass("selected");
+    $(square).addClass("selected");
+
+  // show it in the view
+    $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);
+  });
+
+
 })
 </script>
