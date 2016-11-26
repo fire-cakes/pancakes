@@ -58,4 +58,8 @@ class Game < ActiveRecord::Base
     end
     false
   end
+
+  def full?
+    white_player_id && black_player_id
+  end
 end
