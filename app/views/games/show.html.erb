@@ -4,13 +4,14 @@
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
           <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
-             <% if @pieces.where(x_coord: column, y_coord: row).present? %>
-                <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
-             <% end%>
+            <% @piece = @pieces.where(x_coord: column, y_coord: row) %>
+             <% if @piece.present? %>
+              <%= link_to @piece.first.image.html_safe, select_pieces_path(piece_id: @piece.first.id) %>
+              <% end %>
+            <% end %>
           </div>
         <% end %>
       </div>
-    <% end %>
   </div>
 </section>
 
@@ -22,9 +23,7 @@ $(function() {
     var cw = $(selector).width();
     $(selector).css({'height':cw*2+'px'});
   }
-
   equalHeight('.square');
-
   $( window ).resize(function() {
     equalHeight('.square');
   })

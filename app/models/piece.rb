@@ -117,13 +117,19 @@ class Piece < ActiveRecord::Base
     game.reset_piece(x, y).update(captured: true)
   end
 
+  def move_to!(new_x, new_y)
+    return unless !pos_filled?(new_x, new_y) || return_piece(new_x, new_y).player_id == current_player
+    capture_piece(new_x, new_y)
+    update_attributes(x_coord: new_x, y_coord: new_y)
+  end
+
   # change first_move to false
   def set_first_move_false!
     first_move == false if first_move
   end
 
   def move_to?(x, y)
-    if pos_filled?(x, y) == true
+    if pos_filled?(x, y)
       if return_piece(x, y).player_id != current_player
         capture_piece(x, y)
         update_attributes(x_coord: x, y_coord: y)
