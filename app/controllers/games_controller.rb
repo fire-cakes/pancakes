@@ -21,6 +21,8 @@ class GamesController < ApplicationController
   end
 
   def edit
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces
   end
 
   def update
@@ -36,7 +38,7 @@ class GamesController < ApplicationController
   end
 
   def check
-    flash[:notice] = "in check"
+    flash[:notice] = 'in check'
     redirect_to game_path
   end
 
