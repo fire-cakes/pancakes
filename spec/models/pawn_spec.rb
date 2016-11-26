@@ -38,4 +38,15 @@ RSpec.describe Pawn, type: :model do
       expect(pawn.valid_move?(4, 6)).to be false
     end
   end
+
+  context 'promote' do
+    it 'allows promotion of pawn to another piece' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.destroy_all
+      pawn = g.pieces.create(type: 'Pawn', x_coord: 4, y_coord: 6, color: true)
+      puts "Enter letter 'q' for rspec test to pass, an invalid letter to get reprompt, and 'r', 'b', or 'k' to fail."
+      pawn.promote(4, 7)
+      expect(pawn.type).to eq('Queen')
+    end
+  end
 end
