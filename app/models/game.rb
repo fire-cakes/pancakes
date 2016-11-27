@@ -48,7 +48,7 @@ class Game < ActiveRecord::Base
   end
 
   def increment_turn
-    self.turn += 1
+    update_attribute(:turn, turn + 1)
   end
 
   def white_turn?
@@ -72,6 +72,6 @@ class Game < ActiveRecord::Base
   end
 
   def full?
-    white_player_id && black_player_id
+    white_player_id.present? && black_player_id.present?
   end
 end
