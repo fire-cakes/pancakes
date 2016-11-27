@@ -128,9 +128,8 @@ class Piece < ActiveRecord::Base
   end
 
   # return the piece at that location
-  def return_piece(x, y)
-    current_game = Game.find(game_id)
-    current_game.pieces.where(x_coord: x, y_coord: y).any? ? current_game.pieces.where(x_coord: x, y_coord: y) : false
+  def occupying_piece(x, y)
+    game.pieces.where(x_coord: x, y_coord: y).any? ? game.pieces.where(x_coord: x, y_coord: y).first : self
   end
 
   # capture the piece
