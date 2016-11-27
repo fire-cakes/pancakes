@@ -52,11 +52,11 @@ class Game < ActiveRecord::Base
   end
 
   def white_turn?
-    self.turn.odd?
+    turn.odd?
   end
 
   def black_turn?
-    self.turn.even?
+    turn.even?
   end
 
   def current_turn

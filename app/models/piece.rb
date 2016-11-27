@@ -20,12 +20,12 @@ class Piece < ActiveRecord::Base
       return false if obstructed?(x, y) # ensure can get to new location
       return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
 
-      # TODO fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
+      # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
       # TODO fail ActiveRecord::Rollback if obstructed?
 
       move_to(x, y)
       game.increment_turn
-      # TODO update game status if appropriate...?
+      # TODO: update game status if appropriate...?
     end
   end
 
@@ -67,8 +67,6 @@ class Piece < ActiveRecord::Base
                             [x0, y1]
                           elsif y_diff.zero?
                             [x1, y0]
-                          else
-                        #    raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
                           end
       end
     end
@@ -133,7 +131,7 @@ class Piece < ActiveRecord::Base
   end
 
   # check if the position is filled
-  def pos_filled?(x, y, game_id = game.id)
+  def pos_filled?(x, y, _game_id = game.id)
     Piece.where(x_coord: x, y_coord: y, game: game.id).any?
   end
 

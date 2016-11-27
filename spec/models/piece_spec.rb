@@ -70,7 +70,6 @@ RSpec.describe Piece, type: :model do
 
       expect(piece.right_color?).to be false
     end
-
   end
 
   context 'occupying_piece' do
