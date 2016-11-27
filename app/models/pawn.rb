@@ -7,8 +7,8 @@ class Pawn < Piece
   def capture_move?(x, y)
     if occupying_piece(x, y)
       return true if occupying_piece(x, y).color != color
-      false
     end
+    false
   end
 
   def valid_move?(x, y)
