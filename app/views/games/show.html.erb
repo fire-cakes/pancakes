@@ -26,6 +26,10 @@
   <p>Square selected: <span id="selected-square"></span></p>
 </div>
 
+<div class="button">
+<li><%= link_to '<button type="button">Forfeit</button>'.html_safe, new_game_path %></li>
+</div>
+
 <script>
 $(function() {
   // declare variables
