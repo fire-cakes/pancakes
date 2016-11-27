@@ -8,15 +8,24 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
-  def attempt_move(params)
-    Piece.transaction do
-      # return false unless game.full? # ensure two players before move
-      return false unless piece.right_color? # ensure same color as turn
-      raise ActiveRecord::Rollback unless move_to(params)
-      # fail ActiveRecord::Rollback if game.check?(color)
+  def attempt_move(x, y)
+    # ensure integers
+    x = x.to_i
+    y = y.to_i
 
-      # TODO: game.increment_turn once merged
-      # TODO update current state of check, checkmate, etc.
+    Piece.transaction do
+      return false unless game.full? # ensure two players before move
+      return false unless right_color? # ensure same color as turn
+      return false if obstructed?(x, y) # ensure can get to new location
+      return false unless valid_move?(x, y) # ensure move is legal
+      # return false if pos_filled?(x, y) && occupying_piece(x, y).color == color # ensures no piece of same color
+
+      # TODO fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
+      # TODO fail ActiveRecord::Rollback if obstructed?
+
+      move_to(x, y)
+      game.increment_turn
+      # TODO update game status if appropriate...?
     end
   end
 
@@ -134,30 +143,18 @@ class Piece < ActiveRecord::Base
 
   # capture the piece
   def capture_piece(x, y)
-    game.reset_piece(x, y).update(captured: true)
-  end
-
-  def move_to!(new_x, new_y)
-    return unless !pos_filled?(new_x, new_y) || return_piece(new_x, new_y).player_id == current_player
-    capture_piece(new_x, new_y)
-    update_attributes(x_coord: new_x, y_coord: new_y)
+    captured_piece = game.pieces.where(x_coord: x, y_coord: y).first
+    captured_piece.update_attributes(captured: true, x_coord: nil, y_coord: nil)
   end
 
   # change first_move to false
   def set_first_move_false!
-    first_move == false if first_move
+    update_attributes(first_move: false)
   end
 
-  def move_to?(x, y)
-    if pos_filled?(x, y)
-      if return_piece(x, y).player_id != current_player
-        capture_piece(x, y)
-        update_attributes(x_coord: x, y_coord: y)
-        set_first_move_false!
-      end
-    else
-      update_attributes(x_coord: x, y_coord: y)
-      set_first_move_false!
-    end
+  def move_to(x, y)
+    capture_piece(x, y) if pos_filled?(x, y) && occupying_piece(x, y).color != color
+    update_attributes(x_coord: x, y_coord: y)
+    set_first_move_false!
   end
 end
