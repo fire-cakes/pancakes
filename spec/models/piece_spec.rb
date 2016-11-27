@@ -25,6 +25,7 @@ RSpec.describe Piece, type: :model do
   context 'pos_filled?' do
     it 'should return true if there is a piece at the inputted location' do
       g = FactoryGirl.create(:game, :with_two_players)
+      g.populate_board!
       game_id = g.id
       piece = g.pieces.first
 
@@ -52,6 +53,7 @@ RSpec.describe Piece, type: :model do
     end
     it 'right_color? should return true for black piece on black turns' do
       game = FactoryGirl.create(:game, :with_two_players)
+      game.populate_board!
       game.increment_turn
       piece = game.pieces.where(color: false).last
 
@@ -59,12 +61,14 @@ RSpec.describe Piece, type: :model do
     end
     it 'right_color? should return true for white piece on white turns' do
       game = FactoryGirl.create(:game, :with_two_players)
+      game.populate_board!
       piece = game.pieces.where(color: true).last
 
       expect(piece.right_color?).to be true
     end
     it 'right_color? should return false for pieces moving when not turn' do
       game = FactoryGirl.create(:game, :with_two_players)
+      game.populate_board!
       game.increment_turn
       piece = game.pieces.where(color: true).last
 
@@ -75,6 +79,7 @@ RSpec.describe Piece, type: :model do
   context 'occupying_piece' do
     it 'should return the piece at the given location' do
       g = FactoryGirl.create(:game, :with_two_players)
+      g.populate_board!
       piece = g.pieces.first
 
       expect(piece.occupying_piece(3, 7)).to eq(Piece.where(x_coord: 3, y_coord: 7).first)

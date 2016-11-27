@@ -6,7 +6,6 @@ class Game < ActiveRecord::Base
 
   scope :available, -> { where('white_player_id IS NULL OR black_player_id IS NULL') }
 
-  after_create :populate_board!
   # creates 32 pieces upon start of game with initial x/y coordinates
   def populate_board!
     # white pieces
@@ -79,6 +78,10 @@ class Game < ActiveRecord::Base
     false
   end
 
+  def stalemate?(player_color)
+      
+  end
+  
   def full?
     white_player_id.present? && black_player_id.present?
   end
