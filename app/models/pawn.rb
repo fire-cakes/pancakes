@@ -5,16 +5,10 @@ class Pawn < Piece
   end
 
   def capture_move?(x, y)
-    if return_piece(x, y)
-      if (return_piece(x, y).select(:color).map(&:color) == [true] && color == true) ||
-         (return_piece(x, y).select(:color).map(&:color) == [false] && color == false)
-        false
-      else
-        true
-      end
-    else
-      false
+    if occupying_piece(x, y)
+      return true if occupying_piece(x, y).color != color
     end
+    false
   end
 
   def valid_move?(x, y)

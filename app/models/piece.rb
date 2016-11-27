@@ -2,15 +2,36 @@
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
   belongs_to :game
-  belongs_to :player
   belongs_to :board
 
   def self.types
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
+  def attempt_move(x, y)
+    # ensure integers
+    x = x.to_i
+    y = y.to_i
+
+    Piece.transaction do
+      return false unless game.full? # ensure two players before move
+      return false unless right_color? # ensure same color as turn
+      return false unless valid_move?(x, y) # ensure move is legal
+      return false if obstructed?(x, y) # ensure can get to new location
+      return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
+
+      # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
+      # TODO fail ActiveRecord::Rollback if obstructed?
+
+      move_to(x, y)
+      game.increment_turn
+      # TODO: update game status if appropriate...?
+    end
+  end
+
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
+  # TODO REWRITE!!! to return true or false
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
     # starting coordinates
@@ -46,8 +67,6 @@ class Piece < ActiveRecord::Base
                             [x0, y1]
                           elsif y_diff.zero?
                             [x1, y0]
-                          else
-                            raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
                           end
       end
     end
@@ -101,43 +120,59 @@ class Piece < ActiveRecord::Base
     !color
   end
 
+  # check if moving piece matches turn's color
+  def right_color?
+    white? && game.white_turn? || black? && game.black_turn?
+  end
+
+  def owner
+    return game.white_player_id if white?
+    return game.black_player_id if black?
+  end
+
   # check if the position is filled
-  def pos_filled?(x, y)
-    Piece.where(x_coord: x, y_coord: y).any?
+  def pos_filled?(x, y, _game_id = game.id)
+    Piece.where(x_coord: x, y_coord: y, game: game.id).any?
+  end
+
+  def pos_filled_with_other_color?(x, y)
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
+
+    return false if other_piece.nil?
+    return true if other_piece.color != color
+
+    false
+  end
+
+  def pos_filled_with_same_color?(x, y)
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
+
+    return false if other_piece.nil?
+
+    return true if other_piece.color == color
+
+    false
   end
 
   # return the piece at that location
-  def return_piece(x, y)
-    current_game = Game.find(game_id)
-    current_game.pieces.where(x_coord: x, y_coord: y).any? ? current_game.pieces.where(x_coord: x, y_coord: y) : false
+  def occupying_piece(x, y)
+    return game.pieces.find_by(x_coord: x, y_coord: y) if game.pieces.find_by(x_coord: x, y_coord: y).present?
   end
 
   # capture the piece
   def capture_piece(x, y)
-    game.reset_piece(x, y).update(captured: true)
-  end
-
-  def move_to!(new_x, new_y)
-    return unless !pos_filled?(new_x, new_y) || return_piece(new_x, new_y).player_id == current_player
-    capture_piece(new_x, new_y)
-    update_attributes(x_coord: new_x, y_coord: new_y)
+    captured_piece = game.pieces.find_by(x_coord: x, y_coord: y)
+    captured_piece.update_attributes(captured: true, x_coord: nil, y_coord: nil)
   end
 
   # change first_move to false
   def set_first_move_false!
-    first_move == false if first_move
+    update_attributes(first_move: false)
   end
 
-  def move_to?(x, y)
-    if pos_filled?(x, y)
-      if return_piece(x, y).player_id != current_player
-        capture_piece(x, y)
-        update_attributes(x_coord: x, y_coord: y)
-        set_first_move_false!
-      end
-    else
-      update_attributes(x_coord: x, y_coord: y)
-      set_first_move_false!
-    end
+  def move_to(x, y)
+    capture_piece(x, y) if pos_filled?(x, y)
+    update_attributes(x_coord: x, y_coord: y)
+    set_first_move_false!
   end
 end
