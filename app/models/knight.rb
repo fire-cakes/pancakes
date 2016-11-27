@@ -14,7 +14,7 @@ class Knight < Piece
     (x_coord - x1).abs + (y_coord - y1).abs == 3
   end
 
-  def obstructed?(x, y)
+  def obstructed?(_x, _y)
     false
   end
 end

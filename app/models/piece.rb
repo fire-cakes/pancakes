@@ -131,12 +131,12 @@ class Piece < ActiveRecord::Base
   end
 
   # check if the position is filled
-  def pos_filled?(x, y, game_id = game.id)
+  def pos_filled?(x, y, _game_id = game.id)
     Piece.where(x_coord: x, y_coord: y, game: game.id).any?
   end
 
   def pos_filled_with_other_color?(x, y)
-    other_piece = Piece.where(x_coord: x, y_coord: y, game_id: game_id).first
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
 
     return false if other_piece.nil?
     return true if other_piece.color != color
@@ -145,7 +145,7 @@ class Piece < ActiveRecord::Base
   end
 
   def pos_filled_with_same_color?(x, y)
-    other_piece = Piece.where(x_coord: x, y_coord: y, game_id: game_id).first
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
 
     return false if other_piece.nil?
 
@@ -156,12 +156,12 @@ class Piece < ActiveRecord::Base
 
   # return the piece at that location
   def occupying_piece(x, y)
-    return game.pieces.where(x_coord: x, y_coord: y).first if game.pieces.where(x_coord: x, y_coord: y).any?
+    return game.pieces.find_by(x_coord: x, y_coord: y) if game.pieces.find_by(x_coord: x, y_coord: y).present?
   end
 
   # capture the piece
   def capture_piece(x, y)
-    captured_piece = game.pieces.where(x_coord: x, y_coord: y).first
+    captured_piece = game.pieces.find_by(x_coord: x, y_coord: y)
     captured_piece.update_attributes(captured: true, x_coord: nil, y_coord: nil)
   end
 
