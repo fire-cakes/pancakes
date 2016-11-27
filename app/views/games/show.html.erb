@@ -8,10 +8,11 @@
                 <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
                   <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
                 </span>
-             <% end%>
+             <% end %>
           </div>
         <% end %>
       </div>
+    <% end %>
   </div>
 </section>
 
