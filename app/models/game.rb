@@ -59,6 +59,14 @@ class Game < ActiveRecord::Base
     self.turn.even?
   end
 
+  def current_turn
+    if white_turn?
+      'white'
+    else
+      'black'
+    end
+  end
+
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board
