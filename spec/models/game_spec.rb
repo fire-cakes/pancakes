@@ -84,6 +84,20 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  context 'full?' do
+    it 'returns true when there are two players' do
+      g = FactoryGirl.create(:game, :with_two_players)
+
+      expect(g.full?).to be_truthy
+    end
+
+    it 'returns false when there is only one player' do
+      g = FactoryGirl.create(:game, :with_one_player)
+
+      expect(g.full?).to be_falsey
+    end
+  end
+
   context 'check?' do
     it 'returns true when there is a check in the game from a horizontal attack' do
       g = FactoryGirl.create(:game, :with_two_players, :check_scenario1)

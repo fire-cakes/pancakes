@@ -8,22 +8,18 @@
                 <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
                   <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
                 </span>
-             <% end%>
-          <div class="square data-x-coord-<%=column%> data-y-coord-<%=row%>">
-            <% @piece = @pieces.where(x_coord: column, y_coord: row) %>
-             <% if @piece.present? %>
-              <%= link_to @piece.first.image.html_safe, select_pieces_path(piece_id: @piece.first.id) %>
-              <% end %>
-            <% end %>
+             <% end %>
           </div>
         <% end %>
       </div>
+    <% end %>
   </div>
 </section>
 
 <div class="notices">
   <p>Piece selected: <span id="selected-piece"></span></p>
   <p>Square selected: <span id="selected-square"></span></p>
+  <p>Current Turn: <%= @game.current_turn %></p>
 </div>
 
 <script>
@@ -47,6 +43,8 @@ $(function() {
 
     piece = event.target;
     selectedPieceID = $(piece).attr("data-piece");
+    selectedPieceXCoord = $(piece).parent().attr("data-x-coord");
+    selectedPieceYCoord = $(piece).parent().attr("data-y-coord");
 
   // set class of piece to selected
     $(".piece").removeClass("selected");
@@ -74,8 +72,27 @@ $(function() {
 
   // show it in the view
     $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);
+
+    if (selectedPieceXCoord != selectedSquareXCoord || selectedPieceYCoord != selectedSquareYCoord) {
+      submitMove(selectedPieceID, selectedSquareXCoord, selectedSquareYCoord)
+    }
   });
 
+   const submitMove = (pieceID, x, y) => {
+    $.ajax({
+      type: 'PATCH',
+      url: '/pieces/' + pieceID,
+      dataType: 'json',
+      data: {
+        id: pieceID,
+        x_coord: x,
+        y_coord: y
+      },
+      success: function(data) {
+        $(location).attr('href', data.update_url);
+      }
+    });
+  }
 
 })
 </script>
