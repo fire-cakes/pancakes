@@ -133,7 +133,7 @@ class Piece < ActiveRecord::Base
   end
 
   # check if the position is filled
-  def pos_filled?(x, y)
+  def pos_filled?(x, y, game_id = game.id)
     Piece.where(x_coord: x, y_coord: y, game: game.id).any?
   end
 

@@ -24,10 +24,12 @@ RSpec.describe Piece, type: :model do
 
   context 'pos_filled?' do
     it 'should return true if there is a piece at the inputted location' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
-      Piece.create(type: 'Pawn', x_coord: 3, y_coord: 7, first_move: true, color: false)
-      expect(piece.pos_filled?(3, 7)).to be true
-      expect(piece.pos_filled?(4, 7)).to be false
+      g = FactoryGirl.create(:game, :with_two_players)
+      game_id = g.id
+      piece = g.pieces.first
+
+      expect(piece.pos_filled?(3, 1, game_id)).to be true
+      expect(piece.pos_filled?(5, 5, game_id)).to be false
     end
   end
 
