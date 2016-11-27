@@ -16,9 +16,9 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       return false unless game.full? # ensure two players before move
       return false unless right_color? # ensure same color as turn
-      return false if obstructed?(x, y) # ensure can get to new location
       return false unless valid_move?(x, y) # ensure move is legal
-      return false if pos_filled_with_other_color?(x, y) # ensures no piece of same color
+      return false if obstructed?(x, y) # ensure can get to new location
+      return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
 
       # TODO fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
       # TODO fail ActiveRecord::Rollback if obstructed?
@@ -141,10 +141,17 @@ class Piece < ActiveRecord::Base
     other_piece = Piece.where(x_coord: x, y_coord: y).first
 
     return false if other_piece.nil?
+    return true if other_piece.color != color
 
-    if other_piece.color != color
-      return true
-    end
+    false
+  end
+
+  def pos_filled_with_same_color?(x, y)
+    other_piece = Piece.where(x_coord: x, y_coord: y).first
+
+    return false if other_piece.nil?
+
+    return true if other_piece.color == color
 
     false
   end
@@ -166,7 +173,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move_to(x, y)
-    capture_piece(x, y) if pos_filled?(x, y) && !pos_filled_with_other_color?(x, y)
+    capture_piece(x, y) if pos_filled?(x, y)
     update_attributes(x_coord: x, y_coord: y)
     set_first_move_false!
   end
