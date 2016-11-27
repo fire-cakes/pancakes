@@ -23,6 +23,6 @@ class PiecesController < ApplicationController
 
   # ensures current player is piece owner
   def right_player?
-    current_player == @piece.owner
+    current_player == Player.find(@piece.owner)
   end
 end
