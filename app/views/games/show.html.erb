@@ -42,6 +42,8 @@ $(function() {
 
     piece = event.target;
     selectedPieceID = $(piece).attr("data-piece");
+    selectedPieceXCoord = $(piece).parent().attr("data-x-coord");
+    selectedPieceYCoord = $(piece).parent().attr("data-y-coord");
 
   // set class of piece to selected
     $(".piece").removeClass("selected");
@@ -69,8 +71,27 @@ $(function() {
 
   // show it in the view
     $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);
+
+    if (selectedPieceXCoord != selectedSquareXCoord || selectedPieceYCoord != selectedSquareYCoord) {
+      submitMove(selectedPieceID, selectedSquareXCoord, selectedSquareYCoord)
+    }
   });
 
+   const submitMove = (pieceID, x, y) => {
+    $.ajax({
+      type: 'PATCH',
+      url: '/pieces/' + pieceID,
+      dataType: 'json',
+      data: {
+        id: pieceID,
+        x_coord: x,
+        y_coord: y
+      },
+      success: function(data) {
+        $(location).attr('href', data.update_url);
+      }
+    });
+  }
 
 })
 </script>
