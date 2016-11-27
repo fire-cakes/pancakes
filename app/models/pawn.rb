@@ -6,14 +6,8 @@ class Pawn < Piece
 
   def capture_move?(x, y)
     if occupying_piece(x, y)
-      if (occupying_piece(x, y).select(:color).map(&:color) == [true] && color == true) ||
-         (occupying_piece(x, y).select(:color).map(&:color) == [false] && color == false)
-        false
-      else
-        true
-      end
-    else
-      false
+      return true if occupying_piece(x, y).color != color
+    false
     end
   end
 
