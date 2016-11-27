@@ -31,6 +31,7 @@ class Piece < ActiveRecord::Base
 
   # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
+  # TODO REWRITE!!! to return true or false
   def obstructed?(x1, y1)
     current_game = Game.find(game_id)
     # starting coordinates
@@ -67,7 +68,7 @@ class Piece < ActiveRecord::Base
                           elsif y_diff.zero?
                             [x1, y0]
                           else
-                            raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
+                        #    raise 'Invalid Destination: Move must be diagonal, horizontal, or vertical'
                           end
       end
     end

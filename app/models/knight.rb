@@ -13,4 +13,8 @@ class Knight < Piece
   def proper_length?(x1, y1)
     (x_coord - x1).abs + (y_coord - y1).abs == 3
   end
+
+  def obstructed?(x, y)
+    false
+  end
 end
