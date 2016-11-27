@@ -18,7 +18,7 @@ class Piece < ActiveRecord::Base
       return false unless right_color? # ensure same color as turn
       return false if obstructed?(x, y) # ensure can get to new location
       return false unless valid_move?(x, y) # ensure move is legal
-      # return false if pos_filled?(x, y) && occupying_piece(x, y).color == color # ensures no piece of same color
+      return false if pos_filled_with_other_color?(x, y) # ensures no piece of same color
 
       # TODO fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
       # TODO fail ActiveRecord::Rollback if obstructed?
@@ -134,12 +134,24 @@ class Piece < ActiveRecord::Base
 
   # check if the position is filled
   def pos_filled?(x, y)
-    Piece.where(x_coord: x, y_coord: y).any?
+    Piece.where(x_coord: x, y_coord: y, game: game.id).any?
+  end
+
+  def pos_filled_with_other_color?(x, y)
+    other_piece = Piece.where(x_coord: x, y_coord: y).first
+
+    return false if other_piece.nil?
+
+    if other_piece.color != color
+      return true
+    end
+
+    false
   end
 
   # return the piece at that location
   def occupying_piece(x, y)
-    game.pieces.where(x_coord: x, y_coord: y).any? ? game.pieces.where(x_coord: x, y_coord: y).first : self
+    return game.pieces.where(x_coord: x, y_coord: y).first if game.pieces.where(x_coord: x, y_coord: y).any?
   end
 
   # capture the piece
@@ -154,7 +166,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move_to(x, y)
-    capture_piece(x, y) if pos_filled?(x, y) && occupying_piece(x, y).color != color
+    capture_piece(x, y) if pos_filled?(x, y) && !pos_filled_with_other_color?(x, y)
     update_attributes(x_coord: x, y_coord: y)
     set_first_move_false!
   end
