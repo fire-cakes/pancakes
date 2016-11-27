@@ -4,7 +4,7 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     @game = @piece.game
 
-    @piece.attempt_move(piece_params)
+    @piece.attempt_move(params[:x_coord], params[:y_coord]) if right_player?
 
     render json: {
       update_url: game_path(@game)
@@ -14,10 +14,15 @@ class PiecesController < ApplicationController
   private
 
   def piece_params
-    @pieces_params = params.require(:pieces).permit(
+    @pieces_params = params.require(:piece).permit(
       :x_coord,
       :y_coord,
       :type
     )
+  end
+
+  # ensures current player is piece owner
+  def right_player?
+    current_player == @piece.owner
   end
 end

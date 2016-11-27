@@ -2,7 +2,6 @@
 # This Piece model describes the Piece class and its properties
 class Piece < ActiveRecord::Base
   belongs_to :game
-  belongs_to :player
   belongs_to :board
 
   def self.types
@@ -116,6 +115,11 @@ class Piece < ActiveRecord::Base
   # check if moving piece matches turn's color
   def right_color?
     white? && game.white_turn? || black? && game.black_turn?
+  end
+
+  def owner
+    return game.white_player_id if white?
+    return game.black_player_id if black?
   end
 
   # check if the position is filled
