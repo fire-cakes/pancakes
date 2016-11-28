@@ -4,22 +4,11 @@ class King < Piece
     color ? '&#9812;' : '&#9818;'
   end
 
-  def obstructed?(new_x, new_y)
-    if correct_moves.include? [new_x, new_y]
-      true
-    else
-      false
-    end
-  end
-
   def valid_move?(new_x, new_y)
-    if super
-      return false
-    end
     y_distance = (new_y - y_coord).abs
     x_distance = (new_x - x_coord).abs
-    return false if y_distance > 1 || x_distance > 1
-    true
+    return true if (y_distance <= 1 && x_distance <= 1) && super
+    false
   end
 
   def correct_moves

@@ -69,7 +69,7 @@ class Game < ActiveRecord::Base
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board
-    opponent_pieces = pieces.where('color != ? AND captured != ?', player_color, true).to_a
+    opponent_pieces = uncaptured_pieces(!player_color)
     opponent_pieces.each do |p|
       if p.valid_move?(king.x_coord, king.y_coord)
         @checking_piece = p
@@ -98,7 +98,12 @@ class Game < ActiveRecord::Base
   end
   
   def stalemate?(player_color)
-      
+    king = pieces.find_by(type: 'King', color: player_color)
+    # checks if all possible moves lead to king moving into check
+    return false unless !king.move_out_of_check?
+    # checks if all possible moves lead remaining piece to result in a check
+    return false if check?(player_color) && @checking_piece.block_check?(king)
+    true
   end
   
   def full?

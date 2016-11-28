@@ -158,28 +158,48 @@ RSpec.describe Game, type: :model do
     end
   end
   context 'stalemate?' do
-    it 'returns false when game is not in stalemate' do
-    g = FactoryGirl.create(:game, :with_two_players)
-    g.update(turn: 2)
-    g.pieces.destroy_all
-    bishop = g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, first_move: false, color: true, player_id: 1)
-    g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, first_move: false, color: true, player_id: 1)
-    g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, first_move: false, color: false, player_id: 2)
-    bishop.move_to!(3, 6)
-    g.update(turn: 3)
-     
-    expect(g.stalemate?).to be false
+    it 'returns false when king can move into check but has other places to go' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, first_move: false, color: false)
+
+      expect(g.stalemate?(false)).to be false
     end
     
-    it 'returns true when in stalemate' do
-    g = FactoryGirl.create(:game, :with_two_players)
-    g.update(turn: 3)
-    g.pieces.destroy_all
-    g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, first_move: false, color: true, player_id: 1)
-    g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, first_move: false, color: true, player_id: 1)
-    g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, first_move: false, color: false, player_id: 2)
-     
-    expect(g.stalemate?).to be true
+    it "returns true when king's next move results in a check" do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, first_move: false, color: false)
+       
+      expect(g.stalemate?(false)).to be true
     end
+    it "returns true when moving a remaining piece results in a check" do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, first_move: false, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 1, y_coord: 7, first_move: false, color: false) 
+      
+      expect(g.stalemate?(false)).to be true
+    end
+    
+    it 'returns false when game is not in stalemate' do
+      g = FactoryGirl.create(:game, :with_two_players, :populate_board)
+
+      expect(g.stalemate?(false)).to be false
+    end
+    
+    
+    it "returns false when a piece is in check but can be blocked by a remaining piece" do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, first_move: false, color: true)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, first_move: false, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 4, first_move: false, color: false) 
+      expect(g.stalemate?(false)).to be false
+    end
+    
   end
 end
