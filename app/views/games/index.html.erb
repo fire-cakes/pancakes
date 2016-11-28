@@ -3,13 +3,13 @@
 	<% if @avaliable_games %>
 		<div class="create-game-container">
 			<%= link_to 'Start New Game', new_game_path, class: 'btn btn-primary' %>
+			<%= link_to 'Dashboard', dashboard_path, class: 'btn btn-primary' %>
 		</div>
 
 		<% @avaliable_games.each do |game| %>
 			<div class="game-item-wrapper">
 			    <h4><%= game.name %></h4>
 					<p>#<%= game.id %></p>
-					<p>Other things</p>
                 <br />
 					<%= simple_form_for game, url: game_path(game) do |f| %>
 		         <%= f.input :black_player_id, as: :hidden, input_html: { value: current_player.id } %>
