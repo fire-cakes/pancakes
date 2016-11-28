@@ -37,7 +37,7 @@ class King < Piece
 
     valid_moves
   end
-  
+
   def move_out_of_check?
     x0 = x_coord
     y0 = y_coord

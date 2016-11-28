@@ -28,10 +28,8 @@ class Piece < ActiveRecord::Base
       # TODO: update game status if appropriate...?
     end
   end
-  
-  # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
+
   # x1 and y1 being the destination coordinates
-  # TODO REWRITE!!! to return true or false
   def obstructed?(x1, y1)
     current_coordinates = [x_coord, y_coord]
     x_diff = (x_coord - x1).abs
@@ -52,6 +50,7 @@ class Piece < ActiveRecord::Base
     end
     obstruction
   end
+
   # return an array of squares between player's piece and destination coordinate
   def squares_between(x1, y1)
     # starting coordinates
@@ -82,12 +81,12 @@ class Piece < ActiveRecord::Base
         back_to_start = true
       else
         places_arr << if x_diff == y_diff
-                            [x1, y1]
-                          elsif x_diff.zero?
-                            [x0, y1]
-                          elsif y_diff.zero?
-                            [x1, y0]
-                          end
+                        [x1, y1]
+                      elsif x_diff.zero?
+                        [x0, y1]
+                      elsif y_diff.zero?
+                        [x1, y0]
+                      end
       end
     end
     places_arr
@@ -103,7 +102,8 @@ class Piece < ActiveRecord::Base
     # unless new_x != @new_x || new_y != @new_y
     #   return false
     # end
-    
+
+    # rubocop:disable NumericPredicate
     # piece cannot move off game board
     if new_x > board_size || new_y > board_size || new_x < 0 || new_y < 0
       return false
@@ -180,6 +180,7 @@ class Piece < ActiveRecord::Base
     update_attributes(x_coord: x, y_coord: y)
     set_first_move_false!
   end
+
   # /// checkmate helpers ///
   # return true if opponent's checking piece can be captured by player
   def capturable?
@@ -191,6 +192,7 @@ class Piece < ActiveRecord::Base
     end
     false
   end
+
   # return true if a player's piece is able to block a check
   def block_check?(king)
     # array of coordinates between the king and the checking piece

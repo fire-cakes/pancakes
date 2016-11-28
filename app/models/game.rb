@@ -84,28 +84,28 @@ class Game < ActiveRecord::Base
     # check that the player is in check
     return false unless check?(player_color)
     # check if there is another piece that can capture the checking piece
-    return false if @checking_piece.capturable? 
+    return false if @checking_piece.capturable?
     # check if the king is able to move itself out of check
     return false if king.move_out_of_check?
     # check if another player piece can block the checking piece
     return false if @checking_piece.block_check?(king)
     true
   end
-  
+
   # return an array of pieces that are still on the board
   def uncaptured_pieces(player_color)
     pieces.includes(:game).where('color = ? and captured = false', player_color).to_a
   end
-  
+
   def stalemate?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # checks if all possible moves lead to king moving into check
-    return false unless !king.move_out_of_check?
+    return false if king.move_out_of_check?
     # checks if all possible moves lead remaining piece to result in a check
     return false if check?(player_color) && @checking_piece.block_check?(king)
     true
   end
-  
+
   def full?
     white_player_id.present? && black_player_id.present?
   end
