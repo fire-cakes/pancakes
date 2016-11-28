@@ -1,5 +1,5 @@
 <section class="board-container">
-  <div class="board" id="board" data-game-id="<%= @game.id %>">
+  <div class="board" data-game-id="<%= @game.id %>">
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
