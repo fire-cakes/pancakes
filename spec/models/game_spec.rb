@@ -157,29 +157,29 @@ RSpec.describe Game, type: :model do
       expect(g.checkmate?(false)).to be true
     end
   end
-  # context 'stalemate?' do
-  #   it 'returns false when game is not in stalemate' do
-  #   g = FactoryGirl.create(:game, :with_two_players)
-  #   g.update(turn: 2)
-  #   g.pieces.destroy_all
-  #   bishop = g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, first_move: false, color: true, player_id: 1)
-  #   g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, first_move: false, color: true, player_id: 1)
-  #   g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, first_move: false, color: false, player_id: 2)
-  #   bishop.move_to!(3, 6)
-  #   g.update(turn: 3)
+  context 'stalemate?' do
+    it 'returns false when game is not in stalemate' do
+    g = FactoryGirl.create(:game, :with_two_players)
+    g.update(turn: 2)
+    g.pieces.destroy_all
+    bishop = g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, first_move: false, color: true, player_id: 1)
+    g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, first_move: false, color: true, player_id: 1)
+    g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, first_move: false, color: false, player_id: 2)
+    bishop.move_to!(3, 6)
+    g.update(turn: 3)
      
-  #   expect(g.stalemate?).to be false
-  #   end
+    expect(g.stalemate?).to be false
+    end
     
-  #   it 'returns true when in stalemate' do
-  #   g = FactoryGirl.create(:game, :with_two_players)
-  #   g.update(turn: 3)
-  #   g.pieces.destroy_all
-  #   g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, first_move: false, color: true, player_id: 1)
-  #   g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, first_move: false, color: true, player_id: 1)
-  #   g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, first_move: false, color: false, player_id: 2)
+    it 'returns true when in stalemate' do
+    g = FactoryGirl.create(:game, :with_two_players)
+    g.update(turn: 3)
+    g.pieces.destroy_all
+    g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, first_move: false, color: true, player_id: 1)
+    g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, first_move: false, color: true, player_id: 1)
+    g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, first_move: false, color: false, player_id: 2)
      
-  #   expect(g.stalemate?).to be true
-  #   end
-  # end
+    expect(g.stalemate?).to be true
+    end
+  end
 end

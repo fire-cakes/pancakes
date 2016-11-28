@@ -90,7 +90,6 @@ class Game < ActiveRecord::Base
     # check if another player piece can block the checking piece
     return false if @checking_piece.block_check?(king)
     true
-      
   end
   
   # return an array of pieces that are still on the board
