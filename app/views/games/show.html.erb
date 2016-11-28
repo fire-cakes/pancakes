@@ -25,6 +25,23 @@
 <script>
 
 $(function() {
+  const loadFirebase = () => {
+    var load_time_stamp = $('body').data('time-stamp');
+    var gameID = "game" + $('.board').data('game-id');
+    var fbRef = new Firebase('https://pancake-chess.firebaseio.com');
+    var indexRef = fbRef.child(gameID);
+
+    indexRef.on('value', function(snapshot) {
+      data = snapshot.val();
+      console.log(data);
+      updated_time_stamp = data['time_stamp'];
+      if (updated_time_stamp > load_time_stamp) {
+        location.reload();
+      }
+    });
+  };
+
+  loadFirebase();
 
   // declare variables
   var square, piece;
