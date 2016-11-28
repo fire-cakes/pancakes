@@ -5,7 +5,8 @@ RSpec.describe Rook, type: :model do
   context 'valid_move?' do
     it 'should be valid rook moves' do
       # set the variables that need to be checked by the test
-      rook = Piece.create(type: 'Rook', x_coord: 4, y_coord: 4)
+      g = FactoryGirl.create(:game, :with_two_players)
+      rook = g.pieces.create(type: 'Rook', x_coord: 4, y_coord: 4)
 
       # set the matchers to check against a value/true/false
       expect(rook.valid_move?(7, 4)).to be true

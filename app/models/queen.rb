@@ -5,7 +5,6 @@ class Queen < Piece
   end
 
   def valid_move?(new_x, new_y)
-    x_coord == new_x || y_coord == new_y ||
-      (x_coord - new_x).abs == (y_coord - new_y).abs
+    (x_coord == new_x || y_coord == new_y || (x_coord - new_x).abs == (y_coord - new_y).abs) && super
   end
 end

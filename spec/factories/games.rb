@@ -14,6 +14,9 @@ FactoryGirl.define do
       black_player_id 2
     end
 
+    trait :populate_board do
+      after :create, &:populate_board!
+    end
     # Test horizontal check
     trait :check_scenario1 do
       after :create do |g|
