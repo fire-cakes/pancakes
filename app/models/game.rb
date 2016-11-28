@@ -72,12 +72,32 @@ class Game < ActiveRecord::Base
     opponent_pieces = pieces.where('color != ? AND captured != ?', player_color, true).to_a
     opponent_pieces.each do |p|
       if p.valid_move?(king.x_coord, king.y_coord)
+        @checking_piece = p
         return true
       end
     end
     false
   end
 
+  def checkmate?(player_color)
+    king = pieces.find_by(type: 'King', color: player_color)
+    # check that the player is in check
+    return false unless check?(player_color)
+    # check if there is another piece that can capture the checking piece
+    return false if @checking_piece.capturable? 
+    # check if the king is able to move itself out of check
+    return false if king.move_out_of_check?
+    # check if another player piece can block the checking piece
+    return false if @checking_piece.block_check?(king)
+    true
+      
+  end
+  
+  # return an array of pieces that are still on the board
+  def uncaptured_pieces(player_color)
+    pieces.includes(:game).where('color = ? and captured = false', player_color).to_a
+  end
+  
   def stalemate?(player_color)
       
   end

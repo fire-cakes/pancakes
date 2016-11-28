@@ -4,13 +4,11 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
   context 'populate_board!' do
     it 'creates 32 starting pieces on a new game start' do
-      g = Game.create
-      g.populate_board!
+      g = FactoryGirl.create(:game, :populate_board)
       expect(g.pieces.count).to eq(32)
     end
     it 'creates the pieces in the correct starting coordinates' do
-      g = Game.create
-      g.populate_board!
+      g = FactoryGirl.create(:game, :populate_board)
       # the correct starting positions for pawns
       pawns_arr = [[0, 1, true], [1, 1, true], [2, 1, true], [3, 1, true],
                    [4, 1, true], [5, 1, true], [6, 1, true], [7, 1, true],
@@ -127,7 +125,38 @@ RSpec.describe Game, type: :model do
       expect(g.check?(false)).to be false
     end
   end
-    
+  
+  context 'checkmate?' do
+    it 'returns false when checking piece can be captured' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+      g.pieces.create(type: 'Rook', x_coord: 1, y_coord: 7, color: true, first_move: false, captured: false)
+      expect(g.checkmate?(false)).to be false
+    end
+    it 'returns false when king can move itself out of check' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false, captured: false)
+      expect(g.checkmate?(false)).to be false
+    end
+    it 'returns false when checking piece can be blocked by another piece' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
+      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true, first_move: false)
+      g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 6, color: false, first_move: false)
+      # black bishop can move to (1,7) to block white rook from checking black king
+      g.pieces.create(type: 'Bishop', x_coord: 3, y_coord: 5, color: false, first_move: false)
+      expect(g.checkmate?(false)).to be false
+    end
+    it 'returns true when game state is in checkmate' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
+      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true, first_move: false) 
+      expect(g.checkmate?(false)).to be true
+    end
+  end
   # context 'stalemate?' do
   #   it 'returns false when game is not in stalemate' do
   #   g = FactoryGirl.create(:game, :with_two_players)
