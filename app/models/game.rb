@@ -71,12 +71,22 @@ class Game < ActiveRecord::Base
     king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board
     opponent_pieces = pieces.where('color != ? AND captured != ?', player_color, true).to_a
-    opponent_pieces.each do |p|
-      if p.valid_move?(king.x_coord, king.y_coord)
+    opponent_pieces.each do |piece|
+      if piece.valid_move?(king.x_coord, king.y_coord)
+        @check_piece = piece
         return true
       end
     end
     false
+  end
+
+  def checkmate?(player_color)
+    checkmate_king = pieces.find_by(type: 'King', color: player_color)
+
+    return false unless check?(player_color)
+    return false unless king.valid_move
+    return false if @check_piece.obstructed(checkmate_king)
+    return false if @check_piece.capture?(check_piece)
   end
 
   def full?
