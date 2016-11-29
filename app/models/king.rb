@@ -38,6 +38,7 @@ class King < Piece
     valid_moves
   end
 
+  # this method does not care whether or not game state is currently in check
   def move_out_of_check?
     x0 = x_coord
     y0 = y_coord

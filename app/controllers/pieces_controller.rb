@@ -9,6 +9,11 @@ class PiecesController < ApplicationController
     render json: {
       update_url: game_path(@game)
     }
+
+    update_firebase(
+      update_url: game_path(@game),
+      time_stamp: Time.now.to_i
+    )
   end
 
   private
@@ -24,5 +29,12 @@ class PiecesController < ApplicationController
   # ensures current player is piece owner
   def right_player?
     current_player == Player.find(@piece.owner)
+  end
+
+  def update_firebase(data)
+    firebase = Firebase::Client.new(Rails.application.config.base_uri)
+
+    response = firebase.set("game#{@game.id}", data)
+    response.success?
   end
 end
