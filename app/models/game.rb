@@ -99,10 +99,10 @@ class Game < ActiveRecord::Base
 
   def stalemate?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
+    # checks if the player is in check
+    return false if check?(player_color)
     # checks if all possible moves lead to king moving into check
     return false if king.move_out_of_check?
-    # checks if all possible moves lead remaining piece to result in a check
-    return false if check?(player_color) && @checking_piece.block_check?(king)
     true
   end
 
