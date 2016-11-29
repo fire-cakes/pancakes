@@ -28,6 +28,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # simple forms to save sanity
 gem 'simple_form'
 
+# for realtime updates on both sides
+gem 'firebase', '~> 0.2.3'
+
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring', group: :development
 
