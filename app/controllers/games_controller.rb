@@ -26,20 +26,26 @@ class GamesController < ApplicationController
   end
 
   def update
-    game = Game.find(params[:id])
-    game.update_attributes game_params
-    redirect_to game_path game
+    @game = Game.find(params[:id])
+    @game.update_attributes game_params
+    respond_to do |format|
+      if @game.valid_move
+        format.html { redirect_to game_path(@game) }
+      else
+        flash_message :notice, 'Illegal move'
+      end
+
+      if @game.check?
+        flash_message :success, 'In check'
+        format.html { redirect_to game_path(@game) }
+      end
+    end
   end
 
   def destroy
     @game = Game.find(params[:id])
     @game.destroy
     redirect_to games_path, notice: 'Your game has been cancel'
-  end
-
-  def check
-    flash[:notice] = 'in check'
-    redirect_to game_path
   end
 
   private
