@@ -1,19 +1,11 @@
 # frozen_string_literal: true
-module Admin
-  # frozen_string_literal: true
-  class PiecesController < ApplicationController
-    def update
-      @piece = Piece.find(params[:id])
-      @game = @piece.game
+class PiecesController < ApplicationController
+  def update
+    @piece = Piece.find(params[:id])
+    @game = @piece.game
 
-      @piece.attempt_move(params[:x_coord], params[:y_coord]) if right_player?
+    @piece.attempt_move(params[:x_coord], params[:y_coord]) if right_player?
 
-<<<<<<< HEAD
-      render json: {
-        update_url: game_path(@game)
-      }
-    end
-=======
     render json: {
       update_url: game_path(@game)
     }
@@ -23,22 +15,20 @@ module Admin
       time_stamp: Time.now.to_i
     )
   end
->>>>>>> 483cd512978928bd332b545e31de786ffd26ff98
 
-    private
+  private
 
-    def piece_params
-      @pieces_params = params.require(:piece).permit(
-        :x_coord,
-        :y_coord,
-        :type
-      )
-    end
+  def piece_params
+    @pieces_params = params.require(:piece).permit(
+      :x_coord,
+      :y_coord,
+      :type
+    )
+  end
 
-    # ensures current player is piece owner
-    def right_player?
-      current_player == Player.find(@piece.owner)
-    end
+  # ensures current player is piece owner
+  def right_player?
+    current_player == Player.find(@piece.owner)
   end
 
   def update_firebase(data)
