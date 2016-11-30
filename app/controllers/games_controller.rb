@@ -1,60 +1,57 @@
 # frozen_string_literal: true
-class GamesController < ApplicationController
-  before_action :authenticate_player!
+  class GamesController < ApplicationController
+    add_flash_types :success, :warning
+    before_action :authenticate_player!
 
-  def index
-    @avaliable_games = Game.available
-  end
+    def index
+      @avaliable_games = Game.available
+    end
 
-  def show
-    @game = Game.find(params[:id])
-    @pieces = @game.pieces
-  end
+    def show
+      @game = Game.find(params[:id])
+      @pieces = @game.pieces
+    end
 
-  def new
-    @game = Game.new
-  end
+    def new
+      @game = Game.new
+    end
 
-  def create
-    @game = Game.create(game_params)
-    redirect_to game_path(@game)
-  end
+    def create
+      @game = Game.create(game_params)
+      redirect_to game_path(@game)
+    end
 
-  def edit
-    @game = Game.find(params[:id])
-    @pieces = @game.pieces
-  end
+    def edit
+      @game = Game.find(params[:id])
+      @pieces = @game.pieces
+    end
 
-  def update
-    @game = Game.find(params[:id])
-    @game.update_attributes game_params
-    respond_to do |format|
-      if @game.valid_move
-        format.html { redirect_to game_path(@game) }
-      else
-        flash_message :notice, 'Illegal move'
-      end
+    def update
+      @game = Game.find(params[:id])
+      @game.update_attributes game_params
+        unless @game.valid_move?
+          format.html { redirect_to game_path(@game), warning: 'Illegal move' }
+        end
 
-      if @game.check?
-        flash_message :success, 'In check'
-        format.html { redirect_to game_path(@game) }
+        if @game.check
+          format.html { redirect_to game_path(@game), success: 'In check' }
+        end
+    end
+
+    def destroy
+      @game = Game.find(params[:id])
+      if @game.destroy
+        format.html { redirect_to game_path(@game), notice: 'Your has been cancel' }
       end
     end
-  end
 
-  def destroy
-    @game = Game.find(params[:id])
-    @game.destroy
-    redirect_to games_path, notice: 'Your game has been cancel'
-  end
+    private
 
-  private
-
-  def game_params
-    params.require(:game).permit(
-      :name,
-      :white_player_id,
-      :black_player_id
-    )
+    def game_params
+      params.require(:game).permit(
+        :name,
+        :white_player_id,
+        :black_player_id
+      )
+    end
   end
-end
