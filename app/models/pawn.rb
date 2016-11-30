@@ -11,6 +11,7 @@ class Pawn < Piece
     false
   end
 
+  # TODO: - fix valid_move to implement super
   def valid_move?(x, y)
     # call super
     # return false unless super

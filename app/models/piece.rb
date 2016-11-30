@@ -29,11 +29,30 @@ class Piece < ActiveRecord::Base
     end
   end
 
-  # rubocop:disable AbcSize, CyclomaticComplexity, PerceivedComplexity
   # x1 and y1 being the destination coordinates
-  # TODO REWRITE!!! to return true or false
   def obstructed?(x1, y1)
-    current_game = Game.find(game_id)
+    current_coordinates = [x_coord, y_coord]
+    x_diff = (x_coord - x1).abs
+    y_diff = (y_coord - y1).abs
+    places_between = squares_between(x1, y1)
+    # get coordinates for all pieces in current game
+    pieces = game.pieces.to_a
+    all_piece_coordinates = pieces.map { |p| [p.x_coord, p.y_coord] }
+    # check if any pieces on board conflict with the coordinates between origin and destination piece position
+    obstruction = false
+    all_piece_coordinates.each do |piece_coordinates|
+      is_current_piece = current_coordinates == piece_coordinates
+      is_destination_piece = piece_coordinates == [x1, y1]
+
+      obstruction = true if x_diff.zero? && y_diff.zero?
+
+      obstruction = true if places_between.include?(piece_coordinates) && !is_current_piece && !is_destination_piece
+    end
+    obstruction
+  end
+
+  # return an array of squares between player's piece and destination coordinate
+  def squares_between(x1, y1)
     # starting coordinates
     x0 = x_coord
     y0 = y_coord
@@ -41,7 +60,7 @@ class Piece < ActiveRecord::Base
     x_diff = (x0 - x1).abs
     y_diff = (y0 - y1).abs
     # array keeps list of coordinates of places between origin and destination
-    places_between = []
+    places_arr = []
     current_coordinates = [x0, y0]
     back_to_start = false
     # iterates through each places in between origin and destination
@@ -61,50 +80,36 @@ class Piece < ActiveRecord::Base
       if current_coordinates == [x1, y1]
         back_to_start = true
       else
-        places_between << if x_diff == y_diff
-                            [x1, y1]
-                          elsif x_diff.zero?
-                            [x0, y1]
-                          elsif y_diff.zero?
-                            [x1, y0]
-                          end
+        places_arr << if x_diff == y_diff
+                        [x1, y1]
+                      elsif x_diff.zero?
+                        [x0, y1]
+                      elsif y_diff.zero?
+                        [x1, y0]
+                      end
       end
     end
-
-    # get coordinates for all pieces in current game
-    pieces = current_game.pieces.to_a
-    all_piece_coordinates = pieces.map { |p| [p.x_coord, p.y_coord] }
-    # check if any pieces on board conflict with the coordinates between origin and destination piece position
-    obstruction = false
-    all_piece_coordinates.each do |piece_coordinates|
-      is_current_piece = current_coordinates == piece_coordinates
-      is_destination_piece = piece_coordinates == [x1, y1]
-
-      obstruction = true if x_diff.zero? && y_diff.zero?
-
-      obstruction = true if places_between.include?(piece_coordinates) && !is_current_piece && !is_destination_piece
-    end
-    obstruction
+    places_arr
   end
 
   def valid_move?(new_x, new_y)
-    @board_size = 7
-    @new_x = new_x
-    @new_y = new_y
+    board_size = 7
     # piece cannot move to same position
-    unless new_x != @x_coord && new_y != @y_coord
+    if new_x == x_coord && new_y == y_coord
       return false
     end
-    # piece cannot move on top of it's own color
-    unless new_x != @new_x || new_y != @new_y
-      return false
-    end
+    # piece cannot move on top of it's own color - IR - not sure what the code below is, commenting out
+    # unless new_x != @new_x || new_y != @new_y
+    #   return false
+    # end
+
+    # rubocop:disable NumericPredicate
     # piece cannot move off game board
-    unless new_x <= @board_size && new_y <= @board_size
+    if new_x > board_size || new_y > board_size || new_x < 0 || new_y < 0
       return false
     end
     # no piece can be obstructed
-    unless obstructed?(new_x, new_y)
+    if obstructed?(new_x, new_y)
       return false
     end
     true
@@ -175,4 +180,31 @@ class Piece < ActiveRecord::Base
     update_attributes(x_coord: x, y_coord: y)
     set_first_move_false!
   end
+
+  # /// checkmate helpers ///
+  # return true if opponent's checking piece can be captured by player
+  def capturable?
+    opponent_pieces = game.uncaptured_pieces(!color)
+    opponent_pieces.each do |piece|
+      if piece.valid_move?(x_coord, y_coord)
+        return true
+      end
+    end
+    false
+  end
+
+  # return true if a player's piece is able to block a check
+  def block_check?(king)
+    # array of coordinates between the king and the checking piece
+    check_squares = squares_between(king.x_coord, king.y_coord)
+    potential_blockers = game.uncaptured_pieces(king.color)
+    potential_blockers.each do |piece|
+      next if piece.type == 'King'
+      check_squares.each do |square|
+        return true if piece.valid_move?(square[0], square[1])
+      end
+    end
+    false
+  end
+  # ////////////////////////////
 end
