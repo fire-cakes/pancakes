@@ -12,10 +12,4 @@ class DashboardsController < ApplicationController
       @user_games = Game.where(black_player_id: current_player.id) + Game.where(white_player_id: current_player.id).order('updated_at').to_a.first(10)
     end
   end
-
-  def available_games
-    if signed_in?
-      @available_games = Game.where(black_player_id: nil).where.not(white_player_id: current_player.id).to_a.first(10)
-    end
-  end
 end
