@@ -4,35 +4,7 @@
       <h1>Dashboard</h1>
       <div class='subheader'><%= current_player.email %></div>
     </hgroup>
-  </div>
-    <section class='games-information'>
-      <hr />
-      <% if signed_in? %>
-        <section class='my-games'>
-          <% if @feature_games.present? %>
-            <h3>My games</h3>
-          <% end %>
-          <ul class='game-list'>
-            <% if @feature_games.present? %>
-              <h4>My scores</h4>
-            <% end %>
-            <% @feature_games.each do |game| %>
-              <% if game.turn==current_player.id %>
-              <% end %>
-            <% end %>
-          </ul>
-          <ul class='game-list'>
-            <% if @feature_games.present? %>
-              <h4>W/L/D</h4>
-            <% end %>
-            <% @feature_games.each do |game| %>
-              <% if game.turn!=current_player.id && game.turn !=nil %>
-              <% end %>
-            <% end %>  
-          </ul>
-        </section>
-      </section>
-      <% @avaliable_games.each do |game| %>
+      <% @user_games.each do |game| %>
       <div class="game-item-wrapper">
           <h4><%= game.name %></h4>
           <p>#<%= game.id %></p>
