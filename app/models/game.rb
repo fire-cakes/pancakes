@@ -6,7 +6,6 @@ class Game < ActiveRecord::Base
 
   scope :available, -> { where('white_player_id IS NULL OR black_player_id IS NULL') }
 
-  after_create :populate_board!
   # creates 32 pieces upon start of game with initial x/y coordinates
   def populate_board!
     # white pieces
@@ -70,13 +69,41 @@ class Game < ActiveRecord::Base
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # array of opponent pieces still on the board
-    opponent_pieces = pieces.where('color != ? AND captured != ?', player_color, true).to_a
+    opponent_pieces = uncaptured_pieces(!player_color)
     opponent_pieces.each do |p|
       if p.valid_move?(king.x_coord, king.y_coord)
+        @checking_piece = p
         return true
       end
     end
     false
+  end
+
+  def checkmate?(player_color)
+    king = pieces.find_by(type: 'King', color: player_color)
+    # check that the player is in check
+    return false unless check?(player_color)
+    # check if there is another piece that can capture the checking piece
+    return false if @checking_piece.capturable?
+    # check if the king is able to move itself out of check
+    return false if king.move_out_of_check?
+    # check if another player piece can block the checking piece
+    return false if @checking_piece.block_check?(king)
+    true
+  end
+
+  # return an array of pieces that are still on the board
+  def uncaptured_pieces(player_color)
+    pieces.includes(:game).where('color = ? and captured = false', player_color).to_a
+  end
+
+  def stalemate?(player_color)
+    king = pieces.find_by(type: 'King', color: player_color)
+    # checks if the player is in check
+    return false if check?(player_color)
+    # checks if all possible moves lead to king moving into check
+    return false if king.move_out_of_check?
+    true
   end
 
   def full?

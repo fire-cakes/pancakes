@@ -8,10 +8,22 @@ module Admin
 
       @piece.attempt_move(params[:x_coord], params[:y_coord]) if right_player?
 
+<<<<<<< HEAD
       render json: {
         update_url: game_path(@game)
       }
     end
+=======
+    render json: {
+      update_url: game_path(@game)
+    }
+
+    update_firebase(
+      update_url: game_path(@game),
+      time_stamp: Time.now.to_i
+    )
+  end
+>>>>>>> 483cd512978928bd332b545e31de786ffd26ff98
 
     private
 
@@ -27,5 +39,12 @@ module Admin
     def right_player?
       current_player == Player.find(@piece.owner)
     end
+  end
+
+  def update_firebase(data)
+    firebase = Firebase::Client.new(Rails.application.config.base_uri)
+
+    response = firebase.set("game#{@game.id}", data)
+    response.success?
   end
 end

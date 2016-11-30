@@ -1,5 +1,5 @@
 <section class="board-container">
-  <div class="board">
+  <div class="board" data-game-id="<%= @game.id %>">
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
         <% 8.times do |column| %>
@@ -23,26 +23,36 @@
 </section>
 
 <div class="notices">
+<%= link_to "Forfeit", root_path, class: 'btn btn-success' %>
   <p>Piece selected: <span id="selected-piece"></span></p>
   <p>Square selected: <span id="selected-square"></span></p>
   <p>Current Turn: <%= @game.current_turn %></p>
 </div>
 
 <script>
+
 $(function() {
+  const loadFirebase = () => {
+    var load_time_stamp = $('body').data('time-stamp');
+    var gameID = "game" + $('.board').data('game-id');
+    var fbRef = new Firebase('https://pancake-chess.firebaseio.com');
+    var indexRef = fbRef.child(gameID);
+
+    indexRef.on('value', function(snapshot) {
+      data = snapshot.val();
+      console.log(data);
+      updated_time_stamp = data['time_stamp'];
+      if (updated_time_stamp > load_time_stamp) {
+        location.reload();
+      }
+    });
+  };
+
+  loadFirebase();
+
   // declare variables
   var square, piece;
   var selectedPieceID, selectedSquareXCoord, selectedSquareYCoord;
-
-  // for sizing the board
-  function equalHeight(selector){
-    var cw = $(selector).width();
-    $(selector).css({'height':cw*2+'px'});
-  }
-  equalHeight('.square');
-  $( window ).resize(function() {
-    equalHeight('.square');
-  })
 
   // after clicking a piece get its id
   $(".piece").click(function (event) {

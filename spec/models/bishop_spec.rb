@@ -5,7 +5,8 @@ RSpec.describe Bishop, type: :model do
   context 'valid_move?' do
     it 'should be valid bishop moves' do
       # set the variables that need to be checked by the test
-      bishop = Piece.create(type: 'Bishop', x_coord: 4, y_coord: 4)
+      g = FactoryGirl.create(:game, :with_two_players)
+      bishop = g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 4)
       # set the matchers to check against a value/true/false
       expect(bishop.valid_move?(6, 6)). to be true
       expect(bishop.valid_move?(2, 2)). to be true
@@ -14,7 +15,8 @@ RSpec.describe Bishop, type: :model do
     end
 
     it 'should be invalid bishop moves' do
-      bishop = Piece.create(type: 'Bishop', x_coord: 4, y_coord: 4)
+      g = FactoryGirl.create(:game, :with_two_players)
+      bishop = g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 4)
       expect(bishop.valid_move?(7, 4)).to be false
       expect(bishop.valid_move?(2, 4)).to be false
       expect(bishop.valid_move?(4, 7)).to be false
