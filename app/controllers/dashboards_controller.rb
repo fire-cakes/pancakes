@@ -4,12 +4,20 @@ class DashboardsController < ApplicationController
 
   def show
     @user_games = user_games
-    @available_games = available_games
   end
 
   def user_games
-    if signed_in?
-      @user_games = Game.where(black_player_id: current_player.id) + Game.where(white_player_id: current_player.id).order('updated_at').to_a.first(10)
-    end
+    return nil unless signed_in?
+    @user_games = Game.where(params[:white_player_id]) + Game.where(params[:black_player_id]).order('updated_at').to_a.first(10)
+  end
+
+  private
+
+  def dash_params
+    params.require(:game).permit(
+      :name,
+      :white_player_id,
+      :black_player_id
+    )
   end
 end
