@@ -46,6 +46,8 @@ class Pawn < Piece
     opponent_pawn = occupying_piece(x, y_coord)
     return false unless opponent_pawn.piece_turn == 1
     # TODO: a condition to return false when the opponent's last move did not involve the opponent pawn
+    last_opponent_piece = game.pieces.changed.last
+    return false unless opponent_pawn == last_opponent_piece
     true
     
   end
