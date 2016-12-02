@@ -129,58 +129,58 @@ RSpec.describe Game, type: :model do
   context 'checkmate?' do
     it 'returns false when checking piece can be captured' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
-      g.pieces.create(type: 'Rook', x_coord: 1, y_coord: 7, color: true, first_move: false, captured: false)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, captured: false)
+      g.pieces.create(type: 'Rook', x_coord: 1, y_coord: 7, color: true, captured: false)
       expect(g.checkmate?(false)).to be false
     end
     it 'returns false when king can move itself out of check' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false, captured: false)
-      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false, captured: false)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, captured: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, captured: false)
       expect(g.checkmate?(false)).to be false
     end
     it 'returns false when checking piece can be blocked by another piece' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
-      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
-      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true, first_move: false)
-      g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 6, color: false, first_move: false)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true)
+      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true)
+      g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 6, color: false)
       # black bishop can move to (1,7) to block white rook from checking black king
-      g.pieces.create(type: 'Bishop', x_coord: 3, y_coord: 5, color: false, first_move: false)
+      g.pieces.create(type: 'Bishop', x_coord: 3, y_coord: 5, color: false)
       expect(g.checkmate?(false)).to be false
     end
     it 'returns true when game state is in checkmate' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false, first_move: false)
-      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true, first_move: false)
-      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true, first_move: false)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false)
+      g.pieces.create(type: 'Rook', x_coord: 2, y_coord: 7, color: true)
+      g.pieces.create(type: 'Queen', x_coord: 0, y_coord: 5, color: true)
       expect(g.checkmate?(false)).to be true
     end
   end
   context 'stalemate?' do
     it 'returns false when king can move into check but has other places to go' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, first_move: false, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 5, color: true)
+      g.pieces.create(type: 'King', x_coord: 4, y_coord: 7, color: true)
+      g.pieces.create(type: 'King', x_coord: 3, y_coord: 0, color: false)
 
       expect(g.stalemate?(false)).to be false
     end
 
     it "returns true when king's next move results in a check" do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, first_move: false, color: false)
+      g.pieces.create(type: 'Queen', x_coord: 6, y_coord: 2, color: true)
+      g.pieces.create(type: 'King', x_coord: 5, y_coord: 1, color: true)
+      g.pieces.create(type: 'King', x_coord: 7, y_coord: 0, color: false)
 
       expect(g.stalemate?(false)).to be true
     end
     it 'returns true when moving a remaining piece results in a check' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, first_move: false, color: false)
-      g.pieces.create(type: 'Bishop', x_coord: 1, y_coord: 7, first_move: false, color: false)
+      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, color: true)
+      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, color: true)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 1, y_coord: 7, color: false)
 
       expect(g.stalemate?(false)).to be true
     end
@@ -193,10 +193,10 @@ RSpec.describe Game, type: :model do
 
     it 'returns false when a piece is in check but can be blocked by a remaining piece' do
       g = FactoryGirl.create(:game, :with_two_players)
-      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, first_move: false, color: true)
-      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, first_move: false, color: false)
-      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 4, first_move: false, color: false)
+      g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 7, color: true)
+      g.pieces.create(type: 'King', x_coord: 1, y_coord: 5, color: true)
+      g.pieces.create(type: 'King', x_coord: 0, y_coord: 7, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 4, y_coord: 4, color: false)
       expect(g.stalemate?(false)).to be false
     end
   end

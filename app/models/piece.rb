@@ -170,15 +170,10 @@ class Piece < ActiveRecord::Base
     captured_piece.update_attributes(captured: true, x_coord: nil, y_coord: nil)
   end
 
-  # change first_move to false
-  def set_first_move_false!
-    update_attributes(first_move: false)
-  end
-
   def move_to(x, y)
     capture_piece(x, y) if pos_filled?(x, y)
-    update_attributes(x_coord: x, y_coord: y)
-    set_first_move_false!
+    update_attributes(x_coord: x, y_coord: y, piece_turn: piece_turn + 1)
+    
   end
 
   # /// checkmate helpers ///

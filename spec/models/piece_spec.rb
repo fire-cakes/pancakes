@@ -35,19 +35,19 @@ RSpec.describe Piece, type: :model do
 
   context 'colors' do
     it 'white? should return true if color is white' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: true)
       expect(piece.white?).to be true
     end
     it 'white? should return false if color is black' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: false)
       expect(piece.white?).to be false
     end
     it 'black? should return true if color is black' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: false)
       expect(piece.black?).to be true
     end
     it 'black? should return false if color is white' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: true)
       expect(piece.black?).to be false
     end
     it 'right_color? should return true for black piece on black turns' do

@@ -22,7 +22,7 @@ class Pawn < Piece
 
     # valid move logic for moving vertically
     if x_coord == x
-      if first_move
+      if piece_turn == 0
         return true if (y - y_coord).abs < 3
         false
       elsif (y - y_coord).abs < 2
@@ -37,5 +37,10 @@ class Pawn < Piece
       return capture_move?(x, y)
     end
     false
+  end
+  
+  def en_passant?(x, y)
+    
+    
   end
 end
