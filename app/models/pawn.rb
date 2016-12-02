@@ -45,9 +45,9 @@ class Pawn < Piece
     return false unless (pos_filled_with_other_color?(x_coord + 1, y_coord) && x == (x_coord + 1)) || (pos_filled_with_other_color?(x_coord - 1, y_coord) && x == (x_coord - 1))
     opponent_pawn = occupying_piece(x, y_coord)
     return false unless opponent_pawn.piece_turn == 1
-    # TODO: a condition to return false when the opponent's last move did not involve the opponent pawn
-    last_opponent_piece = game.pieces.changed.last
-    return false unless opponent_pawn == last_opponent_piece
+    # Makes sure that the last moved piece by the opponent is the same as the opponent pawn
+    last_opponent_piece = game.pieces.where('color = ? and captured = false', !color).order("updated_at").last
+    return false unless last_opponent_piece == opponent_pawn
     true
     
   end

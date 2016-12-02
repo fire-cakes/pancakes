@@ -94,10 +94,11 @@ RSpec.describe Pawn, type: :model do
       g = FactoryGirl.create(:game, :with_two_players)
       # black's turn (even) to attempt en passant capture on white pawn
       g.turn = 5
+      not_pawn = g.pieces.create(type: 'Bishop', x_coord: 0, y_coord: 6, piece_turn: 1, color: true)
       pawn = g.pieces.create(type: 'Pawn', x_coord: 1, y_coord: 3, piece_turn: 2, color: false)
       g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, piece_turn: 1, color: true)
       g.pieces.create(type: 'Pawn', x_coord: 2, y_coord: 3, piece_turn: 1, color: true)
-      not_pawn = g.pieces.create(type: 'Bishop', x_coord: 0, y_coord: 6, piece_turn: 1, color: true)
+      
       not_pawn.move_to(2,4)
       g.increment_turn
       
