@@ -68,6 +68,16 @@ RSpec.describe Pawn, type: :model do
       expect(pawn.en_passant?(1, 2)).to be true
     end
 
+    it 'returns false when the piece to be captured is not a pawn' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      # black's turn (even) to attempt en passant capture on white pawn
+      g.turn = 6
+      pawn = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, piece_turn: 2, color: false)
+      g.pieces.create(type: 'Bishop', x_coord: 1, y_coord: 3, piece_turn: 1, color: true)
+
+      expect(pawn.en_passant?(1, 2)).to be false
+    end
+
     it " returns false when the opponent's pawn did not move forward two ranks from its starting position" do
       g = FactoryGirl.create(:game, :with_two_players)
       # black's turn (even) to attempt en passant capture on white pawn
