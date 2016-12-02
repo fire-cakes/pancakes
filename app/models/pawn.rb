@@ -40,7 +40,8 @@ class Pawn < Piece
   end
   
   def en_passant?(x, y)
-    
+    return false unless pos_filled_with_other_color?(x_coord + 1, y_coord) || pos_filled_with_other_color?(x_coord -1 , y_coord)
+    true
     
   end
 end
