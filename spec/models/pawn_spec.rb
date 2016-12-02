@@ -37,16 +37,35 @@ RSpec.describe Pawn, type: :model do
   end
   
   context 'en_passant?' do
-    it 'returns true when a pawn is a valid en passant capture' do
+    it 'returns true when a pawn move is a valid en passant capture' do
       g = FactoryGirl.create(:game, :with_two_players)
       # black's turn (even) to attempt en passant capture on white pawn
       g.turn = 6
       pawn = g.pieces.create(type: 'Pawn', x_coord: 1, y_coord: 3, piece_turn: 2, color: false)
-      g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, piece_turn: 1, color: true)
+      opp_pawn = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, piece_turn: 1, color: true)
+
+      expect(pawn.en_passant?(0, 2)).to be true
+      expect(pawn.valid_move?(0, 2)).to be true
+      expect(pawn.en_passant?(2, 2)).to be false
+      expect(pawn.valid_move?(2, 2)).to be false
+      
+      opp_pawn.destroy
       g.pieces.create(type: 'Pawn', x_coord: 2, y_coord: 3, piece_turn: 1, color: true)
       
-      expect(pawn.en_passant?(0, 2)).to be true
       expect(pawn.en_passant?(2, 2)).to be true
+      expect(pawn.valid_move?(2, 2)).to be true
+      expect(pawn.en_passant?(0, 2)).to be false
+      expect(pawn.valid_move?(0, 2)).to be false
+    end
+    
+    it 'returns true when a pawn move is a valid en passant capture, where pawn is on an edge (x_coord = 0)' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      # black's turn (even) to attempt en passant capture on white pawn
+      g.turn = 6
+      pawn = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, piece_turn: 2, color: false)
+      g.pieces.create(type: 'Pawn', x_coord: 1, y_coord: 3, piece_turn: 1, color: true)
+      
+      expect(pawn.en_passant?(1, 2)).to be true
     end
     
     it " returns false when the opponent's pawn did not move forward two ranks from its starting position" do
@@ -80,7 +99,7 @@ RSpec.describe Pawn, type: :model do
       g.pieces.create(type: 'Pawn', x_coord: 2, y_coord: 3, piece_turn: 1, color: true)
       not_pawn = g.pieces.create(type: 'Bishop', x_coord: 0, y_coord: 6, piece_turn: 1, color: true)
       not_pawn.move_to(2,4)
-      game.increment_turn
+      g.increment_turn
       
       expect(pawn.en_passant?(0, 2)).to be false
       expect(pawn.en_passant?(2, 2)).to be false
