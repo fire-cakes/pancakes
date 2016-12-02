@@ -81,4 +81,16 @@ RSpec.describe Piece, type: :model do
       expect(piece.occupying_piece(4, 7)).to eq(Piece.where(x_coord: 4, y_coord: 7).first)
     end
   end
+
+  context 'move_to' do
+    it 'should increment piece_turn by one' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      p = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 1, piece_turn: 0, color: true)
+      expect(p.piece_turn).to be(0)
+      p.move_to(0, 2)
+      expect(p.piece_turn).to be(1)
+      p.move_to(0, 3)
+      expect(p.piece_turn).to be(2)
+    end
+  end
 end
