@@ -9,6 +9,7 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @pieces = @game.pieces
+    @current_player = current_player
   end
 
   def new

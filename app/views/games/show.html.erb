@@ -1,4 +1,9 @@
 <section class="board-container">
+<% if @game.check?(false)#@game.player_color(@current_player)) %>
+  <div class="alert alert-danger">
+      <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+  </div>
+
   <div class="board" data-game-id="<%= @game.id %>">
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
