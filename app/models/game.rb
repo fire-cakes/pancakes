@@ -66,8 +66,9 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def player_color(player)
-    player == @black_player_id ? 'black' : 'white'
+  def player_color(*)
+    return true if white_turn?
+    return false if black_turn?
   end
 
   def check?(player_color)

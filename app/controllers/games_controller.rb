@@ -39,11 +39,6 @@ class GamesController < ApplicationController
     redirect_to games_path, notice: 'Your game has been cancel'
   end
 
-  def check
-    flash[:notice] = 'in check'
-    redirect_to game_path
-  end
-
   private
 
   def game_params
