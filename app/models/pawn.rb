@@ -39,6 +39,14 @@ class Pawn < Piece
     false
   end
 
+  def move_to(x, y)
+    if en_passant?(x, y)
+      opponent_pawn = occupying_piece(x, y_coord)
+      opponent_pawn.update_attributes(captured: true)
+    end
+    super
+  end
+
   def en_passant?(x, _y)
     return false unless (pos_filled_with_other_color?(x_coord + 1, y_coord) && x == (x_coord + 1)) ||
                         (pos_filled_with_other_color?(x_coord - 1, y_coord) && x == (x_coord - 1))

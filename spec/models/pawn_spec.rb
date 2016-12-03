@@ -115,5 +115,19 @@ RSpec.describe Pawn, type: :model do
       expect(pawn.en_passant?(0, 2)).to be false
       expect(pawn.en_passant?(2, 2)).to be false
     end
+
+    it 'changes captured attribute to true once move_to method is called' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.turn = 6
+      pawn = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 3, captured: false, piece_turn: 2, color: false)
+      capture_pawn = g.pieces.create(type: 'Pawn', x_coord: 1, y_coord: 3, captured: false, piece_turn: 1, color: true)
+
+      pawn.move_to(1, 2)
+      pawn.reload
+      capture_pawn.reload
+      expect(pawn.captured).to be false
+      expect(pawn).to have_attributes(x_coord: 1, y_coord: 2)
+      expect(capture_pawn.captured).to be true
+    end
   end
 end
