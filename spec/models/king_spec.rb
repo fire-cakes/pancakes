@@ -29,9 +29,12 @@ RSpec.describe King, type: :model do
   context 'castling?' do
     it 'allows castling when requirements met' do
       g = FactoryGirl.create(:game, :with_two_players)
+      g.pieces.destroy_all
       king = g.pieces.create(type: 'King', x_coord: 4, y_coord: 0, first_move: true, color: true)
-       rook = g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 0, first_move: true, color: true)
-      expect(king.valid_move?(4, 3)).to be true
-      expect(pawn.valid_move?(4, 4)).to be true
+      rook = g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 0, first_move: true, color: true)
+      king.castling?(6, 0)
+      expect(king.x_coord).to eq(6)
+      expect(rook.x_coord).to eq(5)
     end
+  end
 end

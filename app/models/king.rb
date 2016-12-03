@@ -53,33 +53,36 @@ class King < Piece
   end
 
   def castling?(x, y)
-    if occupying_piece(x, y)
-      other_piece == occupying_piece(x, y)
-      if first_move &&&& other_piece.color == color && other_piece(x, y).first_move &&other_piece.type == Rook && obstructed?(x, y)
-        if black?
-          if occupying_piece(x, y).x_coord == 0
-            update_attributes(x_coord: 2, y_coord: y)
-            occupying_piece.update_attributes(x_coord: 3, y_coord: y)
-          end
-          if occupying_piece(x, y).x_coord == 7
-            update_attributes(x_coord: 6, y_coord: y)
-            occupying_piece.update_attributes(x_coord: 5, y_coord: y)
-          end
-        end
+    # check if first move for king and attempting to move to a legal castling location
+    if first_move && (x_coord - x).abs == 2 && y_coord == y
 
-        if white?
-          if occupying_piece(x, y).x_coord == 0
-            update_attributes(x_coord: 2, y_coord: y)
-            occupying_piece.update_attributes(x_coord: 3, y_coord: y)
-          end
-          if occupying_piece(x, y).x_coord == 7
-            update_attributes(x_coord: 6, y_coord: y)
-            occupying_piece.update_attributes(x_coord: 5, y_coord: y)
-          end
-        end
+      # castling logic for white player rook on left side
+      if (x_coord - x) > 0 && occupying_piece(0, 0).type == 'Rook' && occupying_piece(0,0).first_move == true && obstructed?(0, 0) == false
+        update_attributes(x_coord: 2)
+        rook = game.pieces.find_by(type: 'Rook', x_coord: 0, y_coord: 0)
+        rook.update_attributes(x_coord: 3)
 
+      # castling logic for white player rook on right side
+      elsif (x_coord - x) < 0 && occupying_piece(7, 0).type == 'Rook' && occupying_piece(7, 0).first_move == true && obstructed?(7, 0) == false
+        update_attributes(x_coord: 6)
+        # binding.pry
+        rook = game.pieces.find_by(type: 'Rook', x_coord: 7, y_coord: 0)
+        rook.update_attributes(x_coord: 5)
+        rook.save!
+
+      # castling logic for black player rook on left side
+      elsif (x_coord - x) > 0 && occupying_piece(0, 7).type == 'Rook' && occupying_piece(0,7).first_move == true && obstructed?(0, 7) == false
+        update_attributes(x_coord: 2)
+        rook = game.pieces.find_by(type: 'Rook', x_coord: 0, y_coord: 7)
+        rook.update_attributes(x_coord: 3)
+
+      # castling logic for black player rook on right side
+      elsif (x_coord - x) < 0 && occupying_piece(7, 7).type == 'Rook' && occupying_piece(7, 7).first_move == true && obstructed?(7, 7) == false
+        update_attributes(x_coord: 6)
+        binding.pry
+        rook = game.pieces.find_by(type: 'Rook', x_coord: 7, y_coord: 7)
+        rook.update_attributes(x_coord: 5)
       end
     end
-
   end
 end
