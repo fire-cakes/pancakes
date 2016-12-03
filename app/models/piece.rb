@@ -17,7 +17,6 @@ class Piece < ActiveRecord::Base
       return false unless game.full? # ensure two players before move
       return false unless right_color? # ensure same color as turn
       return false unless valid_move?(x, y) # ensure move is legal
-      return false if obstructed?(x, y) # ensure can get to new location
       return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
 
       # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
@@ -95,23 +94,13 @@ class Piece < ActiveRecord::Base
   def valid_move?(new_x, new_y)
     board_size = 7
     # piece cannot move to same position
-    if new_x == x_coord && new_y == y_coord
-      return false
-    end
-    # piece cannot move on top of it's own color - IR - not sure what the code below is, commenting out
-    # unless new_x != @new_x || new_y != @new_y
-    #   return false
-    # end
-
+    return false if new_x == x_coord && new_y == y_coord
     # rubocop:disable NumericPredicate
     # piece cannot move off game board
-    if new_x > board_size || new_y > board_size || new_x < 0 || new_y < 0
-      return false
-    end
-    # no piece can be obstructed
-    if obstructed?(new_x, new_y)
-      return false
-    end
+    return false if new_x > board_size || new_y > board_size || new_x < 0 || new_y < 0
+    # move cannot be obstructed by another piece
+    return false if obstructed?(new_x, new_y)
+
     true
   end
 
