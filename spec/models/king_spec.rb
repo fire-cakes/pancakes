@@ -25,4 +25,13 @@ RSpec.describe King, type: :model do
       expect(king.valid_move?(4, 2)).to be false
     end
   end
+
+  context 'castling?' do
+    it 'allows castling when requirements met' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      king = g.pieces.create(type: 'King', x_coord: 4, y_coord: 0, first_move: true, color: true)
+       rook = g.pieces.create(type: 'Rook', x_coord: 7, y_coord: 0, first_move: true, color: true)
+      expect(king.valid_move?(4, 3)).to be true
+      expect(pawn.valid_move?(4, 4)).to be true
+    end
 end

@@ -51,4 +51,35 @@ class King < Piece
     end
     false
   end
+
+  def castling?(x, y)
+    if occupying_piece(x, y)
+      other_piece == occupying_piece(x, y)
+      if first_move &&&& other_piece.color == color && other_piece(x, y).first_move &&other_piece.type == Rook && obstructed?(x, y)
+        if black?
+          if occupying_piece(x, y).x_coord == 0
+            update_attributes(x_coord: 2, y_coord: y)
+            occupying_piece.update_attributes(x_coord: 3, y_coord: y)
+          end
+          if occupying_piece(x, y).x_coord == 7
+            update_attributes(x_coord: 6, y_coord: y)
+            occupying_piece.update_attributes(x_coord: 5, y_coord: y)
+          end
+        end
+
+        if white?
+          if occupying_piece(x, y).x_coord == 0
+            update_attributes(x_coord: 2, y_coord: y)
+            occupying_piece.update_attributes(x_coord: 3, y_coord: y)
+          end
+          if occupying_piece(x, y).x_coord == 7
+            update_attributes(x_coord: 6, y_coord: y)
+            occupying_piece.update_attributes(x_coord: 5, y_coord: y)
+          end
+        end
+
+      end
+    end
+
+  end
 end
