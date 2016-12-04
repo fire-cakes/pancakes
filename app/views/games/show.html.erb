@@ -1,4 +1,9 @@
 <section class="board-container">
+<% if @game.check?(@game.player_color(@current_player)) %>
+  <div class="alert alert-danger">
+      <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+  </div>
+<% end %>
   <div class="board" data-game-id="<%= @game.id %>">
     <% 7.downto(0) do |row| %>
       <div class="row <%= row.even? ? 'even' : 'odd' %>">
@@ -14,6 +19,12 @@
       </div>
     <% end %>
   </div>
+    <div class="container">
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %>"><%= value %></div>
+      <% end %>
+      <%= yield %>
+    </div>
 </section>
 
 <div class="notices">

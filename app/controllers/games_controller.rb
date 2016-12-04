@@ -9,6 +9,7 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @pieces = @game.pieces
+    @current_player = current_player
   end
 
   def new
@@ -36,11 +37,6 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @game.destroy
     redirect_to games_path, notice: 'Your game has been cancel'
-  end
-
-  def check
-    flash[:notice] = 'in check'
-    redirect_to game_path
   end
 
   private
