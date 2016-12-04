@@ -35,19 +35,19 @@ RSpec.describe Piece, type: :model do
 
   context 'colors' do
     it 'white? should return true if color is white' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: true)
       expect(piece.white?).to be true
     end
     it 'white? should return false if color is black' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: false)
       expect(piece.white?).to be false
     end
     it 'black? should return true if color is black' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: false)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: false)
       expect(piece.black?).to be true
     end
     it 'black? should return false if color is white' do
-      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, first_move: true, color: true)
+      piece = Piece.create(type: 'Pawn', x_coord: 3, y_coord: 3, piece_turn: 0, color: true)
       expect(piece.black?).to be false
     end
     it 'right_color? should return true for black piece on black turns' do
@@ -79,6 +79,18 @@ RSpec.describe Piece, type: :model do
 
       expect(piece.occupying_piece(3, 7)).to eq(Piece.where(x_coord: 3, y_coord: 7).first)
       expect(piece.occupying_piece(4, 7)).to eq(Piece.where(x_coord: 4, y_coord: 7).first)
+    end
+  end
+
+  context 'move_to' do
+    it 'should increment piece_turn by one' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      p = g.pieces.create(type: 'Pawn', x_coord: 0, y_coord: 1, piece_turn: 0, color: true)
+      expect(p.piece_turn).to be(0)
+      p.move_to(0, 2)
+      expect(p.piece_turn).to be(1)
+      p.move_to(0, 3)
+      expect(p.piece_turn).to be(2)
     end
   end
 end
