@@ -1,0 +1,13 @@
+<div class='dashboard-container'>
+  <div class='dashboard-content'>
+    <hgroup>
+      <h1>Dashboard</h1>
+      <div class='subheader'><%= current_player.email %></div>
+    </hgroup>
+      <% @user_games.each do |game| %>
+      <div class="game-item-wrapper">
+          <h4><%= game.name %></h4>
+          <p>#<%= game.id %></p>
+      <% end %>
+      </div>
+</div>
