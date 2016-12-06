@@ -5,18 +5,35 @@
   </div>
 <% end %>
   <div class="board" data-game-id="<%= @game.id %>">
-    <% 7.downto(0) do |row| %>
-      <div class="row <%= row.even? ? 'even' : 'odd' %>">
-        <% 8.times do |column| %>
-          <div class="square" data-x-coord="<%=column%>" data-y-coord="<%=row%>">
-             <% if @pieces.where(x_coord: column, y_coord: row).present? %>
-                <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
-                  <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
-                </span>
-             <% end %>
-          </div>
-        <% end %>
-      </div>
+    <% if @current_player.id == @game.white_player_id %>
+      <% 7.downto(0) do |row| %>
+        <div class="row <%= row.even? ? 'even' : 'odd' %>">
+          <% 8.times do |column| %>
+            <div class="square" data-x-coord="<%=column%>" data-y-coord="<%=row%>">
+               <% if @pieces.where(x_coord: column, y_coord: row).present? %>
+                  <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
+                    <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                  </span>
+               <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% elsif @current_player.id == @game.black_player_id %>
+      <% 0.upto(7) do |row| %>
+        <div class="row <%= row.even? ? 'even' : 'odd' %>">
+          <% 7.downto(0) do |column| %>
+            <div class="square" data-x-coord="<%=column%>" data-y-coord="<%=row%>">
+               <% if @pieces.where(x_coord: column, y_coord: row).present? %>
+                  <span class="piece" data-piece="<%= @pieces.where(x_coord: column, y_coord: row).first.id%>">
+                    <%= @pieces.where(x_coord: column, y_coord: row).first.image.html_safe %>
+                  </span>
+               <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    
     <% end %>
   </div>
     <div class="container">
