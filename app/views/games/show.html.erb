@@ -94,7 +94,6 @@
     });
 
   // droppable
-
     $( ".square" ).droppable({
       accept: piece,
       drop: function( event, ui ) {
@@ -134,87 +133,3 @@
   }
   } );
 </script>
-
-<!--<script>-->
-
-<!--$(function() {-->
-<!--  const loadFirebase = () => {-->
-<!--    var load_time_stamp = $('body').data('time-stamp');-->
-<!--    var gameID = "game" + $('.board').data('game-id');-->
-<!--    var fbRef = new Firebase('https://pancake-chess.firebaseio.com');-->
-<!--    var indexRef = fbRef.child(gameID);-->
-
-<!--    indexRef.on('value', function(snapshot) {-->
-<!--      data = snapshot.val();-->
-<!--      console.log(data);-->
-<!--      updated_time_stamp = data['time_stamp'];-->
-<!--      if (updated_time_stamp > load_time_stamp) {-->
-<!--        location.reload();-->
-<!--      }-->
-<!--    });-->
-<!--  };-->
-
-<!--  loadFirebase();-->
-
-<!--  // declare variables-->
-<!--  var square, piece;-->
-<!--  var selectedPieceID, selectedSquareXCoord, selectedSquareYCoord;-->
-
-<!--  // after clicking a piece get its id-->
-<!--  $(".piece").click(function (event) {-->
-
-<!--    piece = event.target;-->
-<!--    selectedPieceID = $(piece).attr("data-piece");-->
-<!--    selectedPieceXCoord = $(piece).parent().attr("data-x-coord");-->
-<!--    selectedPieceYCoord = $(piece).parent().attr("data-y-coord");-->
-
-<!--  // set class of piece to selected-->
-<!--    $(".piece").removeClass("selected");-->
-<!--    $(piece).addClass("selected");-->
-
-<!--  // show it in the view-->
-<!--    $('#selected-piece').text(selectedPieceID);-->
-<!--  });-->
-
-<!--  // after square its coords-->
-<!--  $(".square").click(function (event) {-->
-
-<!--    if ($($(event.target)[0]).hasClass('piece')) {-->
-<!--      square = $(event.target).parent()[0]-->
-<!--    } else {-->
-<!--      square = event.target;-->
-<!--    }-->
-
-<!--    selectedSquareXCoord = $(square).attr("data-x-coord");-->
-<!--    selectedSquareYCoord = $(square).attr("data-y-coord");-->
-
-<!--  // set class of piece to selected-->
-<!--    $(".square").removeClass("selected");-->
-<!--    $(square).addClass("selected");-->
-
-<!--  // show it in the view-->
-<!--    $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);-->
-
-<!--    if (selectedPieceXCoord != selectedSquareXCoord || selectedPieceYCoord != selectedSquareYCoord) {-->
-<!--      submitMove(selectedPieceID, selectedSquareXCoord, selectedSquareYCoord)-->
-<!--    }-->
-<!--  });-->
-
-<!--   const submitMove = (pieceID, x, y) => {-->
-<!--    $.ajax({-->
-<!--      type: 'PATCH',-->
-<!--      url: '/pieces/' + pieceID,-->
-<!--      dataType: 'json',-->
-<!--      data: {-->
-<!--        id: pieceID,-->
-<!--        x_coord: x,-->
-<!--        y_coord: y-->
-<!--      },-->
-<!--      success: function(data) {-->
-<!--        $(location).attr('href', data.update_url);-->
-<!--      }-->
-<!--    });-->
-<!--  }-->
-
-<!--})-->
-<!--</script>-->
