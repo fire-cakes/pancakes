@@ -85,7 +85,7 @@ class Game < ActiveRecord::Base
   end
 
   def checking_piece
-    return "#{@checking_piece.type} (#{@checking_piece.x_coord}, #{@checking_piece.y_coord})"
+    "#{@checking_piece.type} (#{@checking_piece.x_coord}, #{@checking_piece.y_coord})"
   end
 
   def checkmate?(player_color)

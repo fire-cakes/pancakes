@@ -34,7 +34,7 @@ RSpec.describe Pawn, type: :model do
       expect(pawn.valid_move?(3, 3)).to be false
       expect(pawn.valid_move?(4, 6)).to be false
     end
-    
+
     it 'does not allow a vertical capture' do
       g = FactoryGirl.create(:game, :with_two_players)
       pawn = g.pieces.create(type: 'Pawn', x_coord: 3, y_coord: 2, piece_turn: 0, color: true)
