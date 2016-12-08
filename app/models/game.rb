@@ -84,6 +84,10 @@ class Game < ActiveRecord::Base
     false
   end
 
+  def checking_piece
+    return "#{@checking_piece.type} (#{@checking_piece.x_coord}, #{@checking_piece.y_coord})"
+  end
+
   def checkmate?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
     # check that the player is in check

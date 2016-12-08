@@ -1,7 +1,7 @@
 <section class="board-container">
 <% if @game.check?(@game.player_color(@current_player)) %>
   <div class="alert alert-danger">
-      <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+      <strong>Check</strong> <%=@game.player_color(@current_player)%> is in check by <%=@game.checking_piece%>
   </div>
 <% end %>
   <div class="board" data-game-id="<%= @game.id %>">
