@@ -21,7 +21,7 @@ class Pawn < Piece
     return false if black? && (y - y_coord) >= 0
 
     # valid move logic for moving vertically
-    if x_coord == x
+    if x_coord == x && capture_move?(x, y) == false
       if piece_turn.zero?
         return true if (y - y_coord).abs < 3
         false

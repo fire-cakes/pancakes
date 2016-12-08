@@ -1,7 +1,7 @@
 <section class="board-container">
 <% if @game.check?(@game.player_color(@current_player)) %>
   <div class="alert alert-danger">
-      <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+      <strong>Check</strong> <%=@game.player_color(@current_player)%> is in check by <%=@game.checking_piece%>
   </div>
 <% end %>
   <div class="board" data-game-id="<%= @game.id %>">
@@ -51,10 +51,10 @@
   <p>Current Turn: <%= @game.current_turn %></p>
 </div>
 
-<script>
 
-$(function() {
-  const loadFirebase = () => {
+<script>
+  $( function() {
+    const loadFirebase = () => {
     var load_time_stamp = $('body').data('time-stamp');
     var gameID = "game" + $('.board').data('game-id');
     var fbRef = new Firebase('https://pancake-chess.firebaseio.com');
@@ -78,47 +78,47 @@ $(function() {
 
   // after clicking a piece get its id
   $(".piece").click(function (event) {
-
+    
     piece = event.target;
     selectedPieceID = $(piece).attr("data-piece");
     selectedPieceXCoord = $(piece).parent().attr("data-x-coord");
     selectedPieceYCoord = $(piece).parent().attr("data-y-coord");
-
+  // make selected piece draggable
+    $(piece).draggable({ containment: ".board-container", grid: [50,50], revert: 'invalid'});
+    
   // set class of piece to selected
     $(".piece").removeClass("selected");
     $(piece).addClass("selected");
-
-  // show it in the view
+    // show it in the view
     $('#selected-piece').text(selectedPieceID);
-  });
+    });
 
-  // after square its coords
-  $(".square").click(function (event) {
-
-    if ($($(event.target)[0]).hasClass('piece')) {
-      square = $(event.target).parent()[0]
-    } else {
-      square = event.target;
-    }
-
-    selectedSquareXCoord = $(square).attr("data-x-coord");
-    selectedSquareYCoord = $(square).attr("data-y-coord");
-
-  // set class of piece to selected
-    $(".square").removeClass("selected");
-    $(square).addClass("selected");
-
-  // show it in the view
-    $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);
-
-    if (selectedPieceXCoord != selectedSquareXCoord || selectedPieceYCoord != selectedSquareYCoord) {
-      submitMove(selectedPieceID, selectedSquareXCoord, selectedSquareYCoord)
-    }
-  });
-
-   const submitMove = (pieceID, x, y) => {
+  // droppable
+    $( ".square" ).droppable({
+      accept: piece,
+      drop: function( event, ui ) {
+        square = event.target;
+        
+        selectedSquareXCoord = $(square).attr("data-x-coord");
+        selectedSquareYCoord = $(square).attr("data-y-coord");
+        
+        $(".square").removeClass("selected");
+        $(square).addClass("selected");
+        
+        // show it in the view
+        $('#selected-square').text('x: ' + selectedSquareXCoord + ', y: ' + selectedSquareYCoord);
+      
+        if (selectedPieceXCoord != selectedSquareXCoord || selectedPieceYCoord != selectedSquareYCoord) {
+            submitMove(selectedPieceID, selectedSquareXCoord, selectedSquareYCoord)
+        }
+    
+      }
+    });
+    const submitMove = (pieceID, x, y) => {
     $.ajax({
       type: 'PATCH',
+      // required, otherwise 'Can't verify CSRF token authenticity' error
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       url: '/pieces/' + pieceID,
       dataType: 'json',
       data: {
@@ -131,6 +131,5 @@ $(function() {
       }
     });
   }
-
-})
+  } );
 </script>

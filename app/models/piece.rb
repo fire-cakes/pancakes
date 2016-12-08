@@ -17,6 +17,7 @@ class Piece < ActiveRecord::Base
       return false unless game.full? # ensure two players before move
       return false unless right_color? # ensure same color as turn
       return false unless valid_move?(x, y) # ensure move is legal
+      return false if move_into_check?(x, y) # ensure that move does not result in check
       return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
 
       # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
@@ -162,6 +163,17 @@ class Piece < ActiveRecord::Base
   def move_to(x, y)
     capture_piece(x, y) if pos_filled?(x, y)
     update_attributes(x_coord: x, y_coord: y, piece_turn: piece_turn + 1)
+  end
+
+  def move_into_check?(new_x, new_y)
+    x0 = x_coord
+    y0 = y_coord
+    # call check? to determine if move will result in a check
+    update_attributes(x_coord: new_x, y_coord: new_y)
+    result = game.check?(color)
+    # reset possible moves to starting position
+    update_attributes(x_coord: x0, y_coord: y0)
+    result
   end
 
   # /// checkmate helpers ///
