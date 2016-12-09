@@ -16,14 +16,11 @@ class Piece < ActiveRecord::Base
     Piece.transaction do
       return false unless game.full? # ensure two players before move
       return false unless right_color? # ensure same color as turn
-      return false unless valid_move?(x, y) # ensure move is legal
-      return false if move_into_check?(x, y) # ensure that move does not result in check
-      return false if pos_filled_with_same_color?(x, y) # ensures no piece of same color
-
+      fail ActiveRecord::Rollback unless move_to(x, y)
+      fail ActiveRecord::Rollback if game.check?(color) # ensure that move does not result in check
       # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
       # TODO fail ActiveRecord::Rollback if obstructed?
 
-      move_to(x, y)
       game.increment_turn
       # TODO: update game status if appropriate...?
     end
@@ -101,7 +98,8 @@ class Piece < ActiveRecord::Base
     return false if new_x > board_size || new_y > board_size || new_x < 0 || new_y < 0
     # move cannot be obstructed by another piece
     return false if obstructed?(new_x, new_y)
-
+    # ensures no piece of same color
+    return false if pos_filled_with_same_color?(new_x, new_y)
     true
   end
 
@@ -127,11 +125,11 @@ class Piece < ActiveRecord::Base
 
   # check if the position is filled
   def pos_filled?(x, y, _game_id = game.id)
-    Piece.where(x_coord: x, y_coord: y, game: game.id).any?
+    Piece.where(x_coord: x, y_coord: y, captured: false, game: game.id).any?
   end
 
   def pos_filled_with_other_color?(x, y)
-    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, captured: false, game_id: game_id)
 
     return false if other_piece.nil?
     return true if other_piece.color != color
@@ -140,10 +138,9 @@ class Piece < ActiveRecord::Base
   end
 
   def pos_filled_with_same_color?(x, y)
-    other_piece = Piece.find_by(x_coord: x, y_coord: y, game_id: game_id)
+    other_piece = Piece.find_by(x_coord: x, y_coord: y, captured: false, game_id: game_id)
 
     return false if other_piece.nil?
-
     return true if other_piece.color == color
 
     false
@@ -161,20 +158,28 @@ class Piece < ActiveRecord::Base
   end
 
   def move_to(x, y)
-    capture_piece(x, y) if pos_filled?(x, y)
-    update_attributes(x_coord: x, y_coord: y, piece_turn: piece_turn + 1)
+    if type == 'Pawn' && en_passant?(x, y)
+      opponent_pawn = occupying_piece(x, y_coord)
+      opponent_pawn.update_attributes(captured: true)
+    end
+
+    if valid_move?(x, y)
+      capture_piece(x, y) if pos_filled?(x, y)
+      update_attributes(x_coord: x, y_coord: y, piece_turn: piece_turn + 1)
+    end
+    
+    false
   end
 
-  def move_into_check?(new_x, new_y)
-    x0 = x_coord
-    y0 = y_coord
-    # call check? to determine if move will result in a check
-    update_attributes(x_coord: new_x, y_coord: new_y)
-    result = game.check?(color)
-    # reset possible moves to starting position
-    update_attributes(x_coord: x0, y_coord: y0)
-    result
-  end
+  # def move_into_check?(new_x, new_y)
+  #   x0 = x_coord
+  #   y0 = y_coord
+  #   # call check? to determine if move will result in a check
+  #   update_attributes(x_coord: new_x, y_coord: new_y)
+  #   return game.check?(color)
+  #   # reset possible moves to starting position
+  #   update_attributes(x_coord: x0, y_coord: y0)
+  # end
 
   # /// checkmate helpers ///
   # return true if opponent's checking piece can be captured by player
@@ -192,6 +197,7 @@ class Piece < ActiveRecord::Base
   def block_check?(king)
     # array of coordinates between the king and the checking piece
     check_squares = squares_between(king.x_coord, king.y_coord)
+    return false if check_squares == [nil, nil]
     potential_blockers = game.uncaptured_pieces(king.color)
     potential_blockers.each do |piece|
       next if piece.type == 'King'

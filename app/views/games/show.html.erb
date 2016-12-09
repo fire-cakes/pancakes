@@ -1,8 +1,14 @@
 <section class="board-container">
 <% if @game.check?(@game.player_color(@current_player)) %>
-  <div class="alert alert-danger">
-      <strong>Check</strong> <%=@game.player_color(@current_player)%> is in check by <%=@game.checking_piece%>
-  </div>
+  <% if @game.checkmate?(@game.player_color(@current_player)) %>
+    <div class="alert alert-danger">
+        <strong>Checkmate</strong> <%=@game.player_color(@current_player)%> loses!
+    </div>
+  <% else %>
+    <div class="alert alert-danger">
+        <strong>Check</strong> <%=@game.current_turn%> is in check by <%=@game.show_checking_piece%>
+    </div>
+  <% end %>
 <% end %>
   <div class="board" data-game-id="<%= @game.id %>">
     <% if @current_player.id == @game.white_player_id %>

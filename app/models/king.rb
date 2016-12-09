@@ -44,10 +44,12 @@ class King < Piece
     y0 = y_coord
     correct_moves.each do |move|
       # call check? to determine if any available valid move is able to get king out of check
-      update_attributes(x_coord: move[0], y_coord: move[1]) if valid_move?(move[0], move[1])
-      return true unless game.check?(color)
-      # reset possible moves to starting position
-      update_attributes(x_coord: x0, y_coord: y0)
+      if valid_move?(move[0], move[1])
+        update_attributes(x_coord: move[0], y_coord: move[1])
+        return true unless game.check?(color)
+        # reset possible moves to starting position
+        update_attributes(x_coord: x0, y_coord: y0)
+      end
     end
     false
   end
