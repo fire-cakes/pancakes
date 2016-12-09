@@ -73,15 +73,19 @@ class Game < ActiveRecord::Base
 
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
+    result = false
     # array of opponent pieces still on the board
     opponent_pieces = uncaptured_pieces(!player_color)
     opponent_pieces.each do |p|
-      if p.valid_move?(king.x_coord, king.y_coord)
-        @checking_piece = p
-        return true
+      next unless p.valid_move?(king.x_coord, king.y_coord)
+      @checking_piece = p
+      # in case of checkmate, where there is more than one checking piece
+      unless @checking_pieces.nil?
+        @checking_pieces << p
       end
+      result = true
     end
-    false
+    result
   end
 
   def show_checking_piece
@@ -90,6 +94,8 @@ class Game < ActiveRecord::Base
 
   def checkmate?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
+    # array of checking pieces, not just singular
+    @checking_pieces = []
     # check that the player is in check
     return false unless check?(player_color)
     # check if there is another piece that can capture the checking piece
@@ -97,7 +103,9 @@ class Game < ActiveRecord::Base
     # check if the king is able to move itself out of check
     return false if king.move_out_of_check?
     # check if another player piece can block the checking piece
-    return false if @checking_piece.block_check?(king)
+    @checking_pieces.each do |check_piece|
+      return false if check_piece.block_check?(king)
+    end
     true
   end
 
