@@ -84,7 +84,7 @@ class Game < ActiveRecord::Base
     false
   end
 
-  def checking_piece
+  def show_checking_piece
     "#{@checking_piece.type} (#{@checking_piece.x_coord}, #{@checking_piece.y_coord})"
   end
 
@@ -112,6 +112,13 @@ class Game < ActiveRecord::Base
     return false if check?(player_color)
     # checks if all possible moves lead to king moving into check
     return false if king.move_out_of_check?
+
+    # # check if any legal moves are available without going into check
+    # uncaptured_pieces((player_color).each do |piece|
+    #   next if piece.type == 'King'
+    #   return false if piece.valid_move?()
+
+    # end
     true
   end
 
