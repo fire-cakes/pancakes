@@ -17,13 +17,13 @@ class Piece < ActiveRecord::Base
       return false unless game.full? # ensure two players before move
       return false unless right_color? # ensure same color as turn
       return false unless valid_move?(x, y) # ensure move is legal
-      
+
       # TODO: fail ActiveRecord::Rollback if game.check?(color) # stop move if in check
       # TODO fail ActiveRecord::Rollback if obstructed?
 
       move_to(x, y)
       reload
-      fail ActiveRecord::Rollback if game.check?(color) # ensure that move does not result in check
+      raise ActiveRecord::Rollback if game.check?(color) # ensure that move does not result in check
 
       game.increment_turn
       # TODO: update game status if appropriate...?
