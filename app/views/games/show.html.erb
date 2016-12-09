@@ -84,7 +84,7 @@
     selectedPieceXCoord = $(piece).parent().attr("data-x-coord");
     selectedPieceYCoord = $(piece).parent().attr("data-y-coord");
   // make selected piece draggable
-    $(piece).draggable({ containment: ".board-container", grid: [50,50], revert: 'invalid'});
+    $(piece).draggable({ containment: ".board", grid: [50,50], revert: 'invalid', stack: piece});
     
   // set class of piece to selected
     $(".piece").removeClass("selected");
@@ -96,7 +96,7 @@
   // droppable
     $( ".square" ).droppable({
       accept: piece,
-      drop: function( event, ui ) {
+      drop: function( event ) {
         square = event.target;
         
         selectedSquareXCoord = $(square).attr("data-x-coord");
