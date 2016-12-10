@@ -193,7 +193,6 @@ class Piece < ActiveRecord::Base
   def block_check?(king)
     # array of coordinates between the king and the checking piece
     check_squares = squares_between(king.x_coord, king.y_coord)
-    return false if check_squares[0].nil?
     potential_blockers = game.uncaptured_pieces(king.color)
     potential_blockers.each do |piece|
       next if piece.type == 'King'
