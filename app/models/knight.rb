@@ -30,6 +30,7 @@ class Knight < Piece
       (-limit..limit).each do |j|
         y0 = y_coord + j
         if valid_move?(x0, y0)
+          # rubocop:disable NumericPredicate
           moves_array << [x0, y0] unless (x0 == x_coord && y0 == y_coord) || (x0 > 7 || y0 > 7 || x0 < 0 || y0 < 0)
         end
       end
