@@ -209,16 +209,18 @@ class Piece < ActiveRecord::Base
   def move_out_of_check?
     x0 = x_coord
     y0 = y_coord
+    result = false
     correct_moves.each do |move|
       # call check? to determine if any available valid move is able to get king out of check
       next unless valid_move?(move[0], move[1])
       update_attributes(x_coord: move[0], y_coord: move[1])
       reload
-      return true unless game.check?(color)
+      result = true unless game.check?(color)
       # reset possible moves to starting position
       update_attributes(x_coord: x0, y_coord: y0)
       reload
+      return true if result == true
     end
-    false
+    result
   end
 end
