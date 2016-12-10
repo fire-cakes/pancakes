@@ -1,7 +1,17 @@
 <section class="board-container">
 <% if @game.check?(@game.player_color(@current_player)) %>
+  <% if @game.checkmate?(@game.player_color(@current_player)) %>
+    <div class="alert alert-danger">
+        <strong>Checkmate</strong> <%=@game.player_color(@current_player)%> loses!
+    </div>
+  <% else %>
+    <div class="alert alert-danger">
+        <strong>Check</strong> <%=@game.current_turn%> is in check by <%=@game.show_checking_piece%>
+    </div>
+  <% end %>
+<% elsif @game.stalemate?(@game.player_color(@current_player)) %>
   <div class="alert alert-danger">
-      <strong>Check</strong> <%=@game.player_color(@current_player)%> is in check by <%=@game.checking_piece%>
+    <strong>Stalemate</strong> Game is a draw.
   </div>
 <% end %>
   <div class="board" data-game-id="<%= @game.id %>">
@@ -84,7 +94,7 @@
     selectedPieceXCoord = $(piece).parent().attr("data-x-coord");
     selectedPieceYCoord = $(piece).parent().attr("data-y-coord");
   // make selected piece draggable
-    $(piece).draggable({ containment: ".board-container", grid: [50,50], revert: 'invalid'});
+    $(piece).draggable({ containment: ".board", grid: [50,50], revert: 'invalid', stack: piece});
     
   // set class of piece to selected
     $(".piece").removeClass("selected");
@@ -96,7 +106,7 @@
   // droppable
     $( ".square" ).droppable({
       accept: piece,
-      drop: function( event, ui ) {
+      drop: function( event ) {
         square = event.target;
         
         selectedSquareXCoord = $(square).attr("data-x-coord");

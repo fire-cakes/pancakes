@@ -73,19 +73,24 @@ class Game < ActiveRecord::Base
 
   def check?(player_color)
     king = pieces.find_by(type: 'King', color: player_color)
+    result = false
     # array of opponent pieces still on the board
     opponent_pieces = uncaptured_pieces(!player_color)
     opponent_pieces.each do |p|
-      if p.valid_move?(king.x_coord, king.y_coord)
-        @checking_piece = p
-        return true
-      end
+      next unless p.valid_move?(king.x_coord, king.y_coord)
+      @checking_piece = p
+      result = true
     end
-    false
+    result
   end
 
-  def checking_piece
+  def show_checking_piece
     "#{@checking_piece.type} (#{@checking_piece.x_coord}, #{@checking_piece.y_coord})"
+  end
+
+  # return an array of pieces that are still on the board
+  def uncaptured_pieces(player_color)
+    pieces.includes(:game).where('color = ? and captured = false', player_color).to_a
   end
 
   def checkmate?(player_color)
@@ -94,24 +99,22 @@ class Game < ActiveRecord::Base
     return false unless check?(player_color)
     # check if there is another piece that can capture the checking piece
     return false if @checking_piece.capturable?
-    # check if the king is able to move itself out of check
-    return false if king.move_out_of_check?
     # check if another player piece can block the checking piece
     return false if @checking_piece.block_check?(king)
+    # check if the king is able to move itself out of check
+    return false if king.move_out_of_check?
+
     true
   end
 
-  # return an array of pieces that are still on the board
-  def uncaptured_pieces(player_color)
-    pieces.includes(:game).where('color = ? and captured = false', player_color).to_a
-  end
-
   def stalemate?(player_color)
-    king = pieces.find_by(type: 'King', color: player_color)
     # checks if the player is in check
     return false if check?(player_color)
-    # checks if all possible moves lead to king moving into check
-    return false if king.move_out_of_check?
+    # check if any legal moves are available without going into check for remaining pieces
+    uncaptured_pieces(player_color).each do |piece|
+      # only takes one legal move to return stalemate false
+      return false if piece.move_out_of_check?
+    end
     true
   end
 
