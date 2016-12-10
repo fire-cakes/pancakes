@@ -43,6 +43,7 @@ class Pawn < Piece
     if en_passant?(x, y)
       opponent_pawn = occupying_piece(x, y_coord)
       opponent_pawn.update_attributes(captured: true)
+      reload
     end
     super
   end
@@ -57,5 +58,18 @@ class Pawn < Piece
     last_opponent_piece = game.pieces.where('color = ? and captured = false', !color).order('updated_at').last
     return false unless last_opponent_piece == opponent_pawn
     true
+  end
+
+  def correct_moves
+    x0 = x_coord
+    y0 = y_coord
+    limit = 2
+    moves_array = []
+    (-limit..limit).each do |i|
+      x0 = x_coord
+      y0 = y_coord + i
+      moves_array << [x0, y0] unless (x0 == x_coord && y0 == y_coord) || (x0 > 7 || y0 > 7 || x0 < 0 || y0 < 0)
+    end
+    moves_array
   end
 end

@@ -111,12 +111,11 @@ class Game < ActiveRecord::Base
     king = pieces.find_by(type: 'King', color: player_color)
     # checks if the player is in check
     return false if check?(player_color)
-    # # check if any legal moves are available without going into check for remaining pieces
-    # uncaptured_pieces((player_color).each do |piece|
-    #   # only takes one legal move to return stalemate false
-    #   return false if piece.move_out_of_check?
-      
-    # end
+    # check if any legal moves are available without going into check for remaining pieces
+    uncaptured_pieces(player_color).each do |piece|
+      # only takes one legal move to return stalemate false
+      return false if piece.move_out_of_check?
+    end
     true
   end
 

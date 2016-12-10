@@ -160,11 +160,13 @@ class Piece < ActiveRecord::Base
   def capture_piece(x, y)
     captured_piece = game.pieces.find_by(x_coord: x, y_coord: y)
     captured_piece.update_attributes(captured: true, x_coord: nil, y_coord: nil)
+    reload
   end
 
   def move_to(x, y)
     capture_piece(x, y) if pos_filled?(x, y)
     update_attributes(x_coord: x, y_coord: y, piece_turn: piece_turn + 1)
+    reload
   end
 
   # def move_into_check?(new_x, new_y)
@@ -199,6 +201,23 @@ class Piece < ActiveRecord::Base
       check_squares.each do |square|
         return true if piece.valid_move?(square[0], square[1])
       end
+    end
+    false
+  end
+
+  # this method does not care whether or not game state is currently in check
+  def move_out_of_check?
+    x0 = x_coord
+    y0 = y_coord
+    correct_moves.each do |move|
+      # call check? to determine if any available valid move is able to get king out of check
+      next unless valid_move?(move[0], move[1])
+      update_attributes(x_coord: move[0], y_coord: move[1])
+      reload
+      return true unless game.check?(color)
+      # reset possible moves to starting position
+      update_attributes(x_coord: x0, y_coord: y0)
+      reload
     end
     false
   end
