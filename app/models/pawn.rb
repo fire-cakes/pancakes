@@ -65,12 +65,23 @@ class Pawn < Piece
     y0 = y_coord
     limit = 2
     moves_array = []
+    # rubocop:disable NumericPredicate
+    # non-capture moves
     (-limit..limit).each do |i|
       x0 = x_coord
       y0 = y_coord + i
-      # rubocop:disable NumericPredicate
+
       moves_array << [x0, y0] unless (x0 == x_coord && y0 == y_coord) || (x0 > 7 || y0 > 7 || x0 < 0 || y0 < 0)
     end
+    # capture moves
+    (-1..1).step(2) do |i|
+      (-1..1).step(2) do |j|
+        x0 = x_coord + i
+        y0 = y_coord + j
+        moves_array << [x0, y0] unless (x0 == x_coord && y0 == y_coord) || (x0 > 7 || y0 > 7 || x0 < 0 || y0 < 0)
+      end
+    end
+
     moves_array
   end
 end
