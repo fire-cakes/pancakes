@@ -66,6 +66,18 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def white_win
+    update_attribute(:status, 1)
+  end
+
+  def black_win
+    update_attribute(:status, 2)
+  end
+
+  def draw
+    update_attribute(:status, 3)
+  end
+
   def player_color(*)
     return true if white_turn?
     return false if black_turn?

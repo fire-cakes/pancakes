@@ -1,15 +1,17 @@
 <section class="board-container">
-<% if @game.check?(@game.player_color(@current_player)) %>
-  <% if @game.checkmate?(@game.player_color(@current_player)) %>
+<% if @game.check?(@game.player_color) %>
+  <% if @game.checkmate?(@game.player_color) %>
+    <% @game.player_color ? @game.black_win : @game.white_win %>
     <div class="alert alert-danger">
-        <strong>Checkmate</strong> <%=@game.player_color(@current_player)%> loses!
+        <strong>Checkmate</strong> <%=@game.player_color%> loses!
     </div>
   <% else %>
     <div class="alert alert-danger">
         <strong>Check</strong> <%=@game.current_turn%> is in check by <%=@game.show_checking_piece%>
     </div>
   <% end %>
-<% elsif @game.stalemate?(@game.player_color(@current_player)) %>
+<% elsif @game.stalemate?(@game.player_color) %>
+  <% @game.draw %>
   <div class="alert alert-danger">
     <strong>Stalemate</strong> Game is a draw.
   </div>
