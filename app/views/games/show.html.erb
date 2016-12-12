@@ -3,7 +3,7 @@
   <% if @game.checkmate?(@game.player_color) %>
     <% @game.player_color ? @game.black_win : @game.white_win %>
     <div class="alert alert-danger">
-        <strong>Checkmate</strong> <%=@game.player_color%> loses!
+        <strong>Checkmate</strong> <%= @game.player_color ? 'Black' : 'White' %> wins!
     </div>
   <% else %>
     <div class="alert alert-danger">
