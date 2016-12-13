@@ -2,7 +2,6 @@
 FactoryGirl.define do
   factory :game do
     id 1
-    status 1
 
     trait :with_one_player do
       white_player_id 1

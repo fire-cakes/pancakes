@@ -1,4 +1,9 @@
 <section class="board-container">
+<% if !@game.full? %>
+  <div class="alert alert-danger">
+    <strong>Waiting for another player to join.</strong> 
+  </div>
+<% end %>
 <% if @game.check?(@game.player_color) %>
   <% if @game.checkmate?(@game.player_color) %>
     <% @game.player_color ? @game.black_win : @game.white_win %>

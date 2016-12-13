@@ -98,6 +98,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  context 'game status' do
+    it 'returns 0 when game is active' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      expect(g.status).to eq 0
+    end
+    it 'returns 1 when white wins' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.white_win
+      expect(g.status).to eq 1
+    end
+    it 'returns 2 when black wins' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.black_win
+      expect(g.status).to eq 2
+    end
+    it 'returns 3 when the game is a draw' do
+      g = FactoryGirl.create(:game, :with_two_players)
+      g.draw
+      expect(g.status).to eq 3
+    end
+  end
+
   context 'check?' do
     it 'returns true when there is a check in the game from a horizontal attack' do
       g = FactoryGirl.create(:game, :with_two_players, :check_scenario1)
